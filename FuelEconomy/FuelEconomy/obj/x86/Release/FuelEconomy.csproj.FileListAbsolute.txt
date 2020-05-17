@@ -1,0 +1,8 @@
+C:\Users\Илья\Desktop\Итоговая работа\FuelEconomy\FuelEconomy\bin\x86\Release\FuelEconomy.exe.config
+C:\Users\Илья\Desktop\Итоговая работа\FuelEconomy\FuelEconomy\bin\x86\Release\FuelEconomy.exe
+C:\Users\Илья\Desktop\Итоговая работа\FuelEconomy\FuelEconomy\bin\x86\Release\FuelEconomy.pdb
+C:\Users\Илья\Desktop\Итоговая работа\FuelEconomy\FuelEconomy\obj\x86\Release\FuelEconomy.Form1.resources
+C:\Users\Илья\Desktop\Итоговая работа\FuelEconomy\FuelEconomy\obj\x86\Release\FuelEconomy.Properties.Resources.resources
+C:\Users\Илья\Desktop\Итоговая работа\FuelEconomy\FuelEconomy\obj\x86\Release\FuelEconomy.csproj.GenerateResource.cache
+C:\Users\Илья\Desktop\Итоговая работа\FuelEconomy\FuelEconomy\obj\x86\Release\FuelEconomy.exe
+C:\Users\Илья\Desktop\Итоговая работа\FuelEconomy\FuelEconomy\obj\x86\Release\FuelEconomy.pdb

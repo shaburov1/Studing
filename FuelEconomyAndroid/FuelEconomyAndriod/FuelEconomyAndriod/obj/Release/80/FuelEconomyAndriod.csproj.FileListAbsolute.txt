@@ -1,0 +1,6 @@
+C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\MonoAndroid,Version=v8.0.AssemblyAttributes.cs
+C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\build.props
+C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\adb.props
+C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\FuelEconomyAndriod.csprojAssemblyReference.cache
+C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\stamp\_BuildLibraryImportsCache.stamp
+C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\res.flag
