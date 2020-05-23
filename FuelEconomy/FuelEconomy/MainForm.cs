@@ -12,15 +12,55 @@ using System.Windows.Forms;
 
 namespace FuelEconomy
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private string SelectedPort { get; set; }
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             getCOMports();
             BluetoothSerial.ReadTimeout = 6000;
             BluetoothSerial.NewLine = "\n";
+            tabControl.DrawItem += new DrawItemEventHandler(tabControl_DrawItem);
+        }
+
+
+        /**
+         * Настройка отрисовки стиля вкладок
+         */
+        private void tabControl_DrawItem(Object sender, System.Windows.Forms.DrawItemEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            Brush _textBrush;
+
+            // Получим объект из коллекции
+            TabPage _tabPage = tabControl.TabPages[e.Index];
+
+            // Получим параметры ограничивающей рамки.
+            Rectangle _tabBounds = tabControl.GetTabRect(e.Index);
+
+            //используем другой шрифт
+            Font _tabFont; 
+
+            if (e.State == DrawItemState.Selected)
+            {
+                //Изменим шрифт и закрасим фон
+                _tabFont = new Font("Comic Sans MS", 18.0f, FontStyle.Bold, GraphicsUnit.Pixel);
+                g.FillRectangle(Brushes.AliceBlue, e.Bounds);
+                _textBrush = new System.Drawing.SolidBrush(Color.Blue);
+            }
+            else
+            {
+                _tabFont = new Font("Comic Sans MS", 18.0f, FontStyle.Regular, GraphicsUnit.Pixel);
+                _textBrush = new System.Drawing.SolidBrush(e.ForeColor);
+                e.DrawBackground();
+            }
+
+            // Напечатаем название вкладки по центру
+            StringFormat _stringFlags = new StringFormat();
+            _stringFlags.Alignment = StringAlignment.Center;
+            _stringFlags.LineAlignment = StringAlignment.Center;
+            g.DrawString(_tabPage.Text, _tabFont, _textBrush, _tabBounds, new StringFormat(_stringFlags));
         }
 
         private void getCOMports()
@@ -98,19 +138,6 @@ namespace FuelEconomy
             }
         }
 
-        private void btn_disconnect_Click(object sender, EventArgs e)
-        {
-            if (BluetoothSerial.IsOpen)
-                BluetoothSerial.Close();
-
-            if (!BluetoothSerial.IsOpen)
-            {
-                txt_log.Text += "Отключено от порта: ";
-                txt_log.Text += BluetoothSerial.PortName;
-                txt_log.AppendText("\r\n");
-            }
-        }
-
         private void btn_clear_Click(object sender, EventArgs e)
         {
             txt_log.Clear();
@@ -150,9 +177,47 @@ namespace FuelEconomy
             //txt_log.AppendText(s);
         }
 
-        private void txt_log_TextChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            saveSettings();
+        }
 
+        private void saveSettings()
+        {
+            Properties.Settings.Default.lastPort = SelectedPort;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            loadSettings();
+        }
+
+        private void loadSettings()
+        {
+            SelectedPort = Properties.Settings.Default.lastPort;
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            loadSettings();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            saveSettings();
+        }
+
+        private void btn_disconnect_Click_1(object sender, EventArgs e)
+        {
+            if (BluetoothSerial.IsOpen)
+                BluetoothSerial.Close();
+
+            if (!BluetoothSerial.IsOpen)
+            {
+                txt_log.Text += "Отключено от порта: ";
+                txt_log.Text += BluetoothSerial.PortName;
+                txt_log.AppendText("\r\n");
+            }
         }
     }
 }

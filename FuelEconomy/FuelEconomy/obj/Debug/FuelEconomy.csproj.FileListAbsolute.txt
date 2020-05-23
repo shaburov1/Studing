@@ -11,9 +11,9 @@ C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабу�
 C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\bin\Debug\FuelEconomy.exe
 C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\bin\Debug\FuelEconomy.pdb
 C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\obj\Debug\FuelEconomy.csprojAssemblyReference.cache
-C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\obj\Debug\FuelEconomy.Form1.resources
 C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\obj\Debug\FuelEconomy.Properties.Resources.resources
 C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\obj\Debug\FuelEconomy.csproj.GenerateResource.cache
 C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\obj\Debug\FuelEconomy.csproj.CoreCompileInputs.cache
 C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\obj\Debug\FuelEconomy.exe
 C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\obj\Debug\FuelEconomy.pdb
+C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomy\FuelEconomy\obj\Debug\FuelEconomy.MainForm.resources
