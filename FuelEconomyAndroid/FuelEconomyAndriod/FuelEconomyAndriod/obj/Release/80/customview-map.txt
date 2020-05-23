@@ -1,4 +1,0 @@
-cache-path;C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\lp\16\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
-external-cache-path;C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\lp\16\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
-external-path;C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\lp\16\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
-paths;C:\Users\shaburovilya\Desktop\Учеба\Итоговая работа Шабуров\Итоговая работа\FuelEconomyAndroid\FuelEconomyAndriod\FuelEconomyAndriod\obj\Release\80\lp\16\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml

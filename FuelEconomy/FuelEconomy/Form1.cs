@@ -149,6 +149,11 @@ namespace FuelEconomy
             }
             //txt_log.AppendText(s);
         }
+
+        private void txt_log_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
  

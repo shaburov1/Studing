@@ -63,13 +63,14 @@
             // 
             // txt_log
             // 
-            this.txt_log.Location = new System.Drawing.Point(302, 14);
+            this.txt_log.Location = new System.Drawing.Point(485, 43);
             this.txt_log.Multiline = true;
             this.txt_log.Name = "txt_log";
             this.txt_log.ReadOnly = true;
             this.txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_log.Size = new System.Drawing.Size(444, 424);
+            this.txt_log.Size = new System.Drawing.Size(337, 269);
             this.txt_log.TabIndex = 2;
+            this.txt_log.TextChanged += new System.EventHandler(this.txt_log_TextChanged);
             // 
             // cbPorts
             // 

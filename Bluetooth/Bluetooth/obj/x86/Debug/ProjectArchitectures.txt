@@ -1,1 +1,0 @@
-C:\Users\Илья\Desktop\Итоговое задание по С#\Bluetooth\Bluetooth\Bluetooth.csproj;x86
