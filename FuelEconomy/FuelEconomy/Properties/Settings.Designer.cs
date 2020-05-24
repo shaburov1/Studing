@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace FuelEconomy.Properties {
     
     
@@ -38,9 +40,9 @@ namespace FuelEconomy.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public float injectorPerformance {
+        public UInt32 injectorPerformance {
             get {
-                return ((float)(this["injectorPerformance"]));
+                return ((UInt32)(this["injectorPerformance"]));
             }
             set {
                 this["injectorPerformance"] = value;

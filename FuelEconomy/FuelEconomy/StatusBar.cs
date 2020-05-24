@@ -10,23 +10,23 @@ namespace FuelEconomy
     class StatusBar
     {
         private string Status { get; set; }
-        private Label image;
-        private Label text;
-        public StatusBar(ref Label img, ref Label txt)
+        private Label imageBar;
+        private Label textBar;
+        public StatusBar(ref Label imgLabel, ref Label txtLabel)
         {
-            image = img;
-            text = txt;
+            imageBar = imgLabel;
+            textBar = txtLabel;
         }
         
 
-        public void setStatus(string status)
+        public void setStatus(string inputStatus)
         {
-            Status = status;
-            text.Text = Status;
-            if (Status == "Статус: Подключено")
-                image.Image = global::FuelEconomy.Properties.Resources.Connected;
+            Status = "Статус: " + inputStatus;
+            textBar.Text = Status;
+            if (Status.Contains("Статус: Подключено"))
+                imageBar.Image = global::FuelEconomy.Properties.Resources.Connected;
             else
-                image.Image = global::FuelEconomy.Properties.Resources.Disconnected;
+                imageBar.Image = global::FuelEconomy.Properties.Resources.Disconnected;
         }
     }
 }

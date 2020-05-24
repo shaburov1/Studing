@@ -31,20 +31,20 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 1D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 1D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 1D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0.8D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 1.2D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 25D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 15D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 9D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint9 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 5D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint10 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0.8D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint9 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint10 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.BluetoothSerial = new System.IO.Ports.SerialPort(this.components);
             this.txt_to_send = new System.Windows.Forms.TextBox();
-            this.txt_log = new System.Windows.Forms.TextBox();
+            txt_log = new System.Windows.Forms.TextBox();
             this.connectButton = new System.Windows.Forms.Button();
             this.btn_clear = new System.Windows.Forms.Button();
             this.btn_rcv = new System.Windows.Forms.Button();
@@ -56,8 +56,9 @@
             this.statusImageLabel = new System.Windows.Forms.Label();
             this.statusTextLabel = new System.Windows.Forms.Label();
             this.btn_send = new System.Windows.Forms.Button();
-            this.btn_disconnect = new System.Windows.Forms.Button();
+            this.disconnectButton = new System.Windows.Forms.Button();
             this.settingsScreen = new System.Windows.Forms.TabPage();
+            this.buttonDefaultSettings = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.inputInjectorPerformance = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -72,20 +73,20 @@
             // 
             // txt_to_send
             // 
-            this.txt_to_send.Location = new System.Drawing.Point(467, 165);
+            this.txt_to_send.Location = new System.Drawing.Point(463, 46);
             this.txt_to_send.Name = "txt_to_send";
             this.txt_to_send.Size = new System.Drawing.Size(181, 20);
             this.txt_to_send.TabIndex = 1;
             // 
             // txt_log
             // 
-            this.txt_log.Location = new System.Drawing.Point(332, 453);
-            this.txt_log.Multiline = true;
-            this.txt_log.Name = "txt_log";
-            this.txt_log.ReadOnly = true;
-            this.txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_log.Size = new System.Drawing.Size(310, 93);
-            this.txt_log.TabIndex = 2;
+            txt_log.Location = new System.Drawing.Point(332, 453);
+            txt_log.Multiline = true;
+            txt_log.Name = "txt_log";
+            txt_log.ReadOnly = true;
+            txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txt_log.Size = new System.Drawing.Size(310, 93);
+            txt_log.TabIndex = 2;
             // 
             // connectButton
             // 
@@ -96,13 +97,13 @@
             this.connectButton.TabIndex = 4;
             this.connectButton.Text = "Подключить";
             this.connectButton.UseVisualStyleBackColor = true;
-            this.connectButton.Click += new System.EventHandler(this.btn_connect_Click);
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
             // 
             // btn_clear
             // 
             this.btn_clear.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btn_clear.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btn_clear.Location = new System.Drawing.Point(578, 205);
+            this.btn_clear.Location = new System.Drawing.Point(574, 72);
             this.btn_clear.Name = "btn_clear";
             this.btn_clear.Size = new System.Drawing.Size(70, 23);
             this.btn_clear.TabIndex = 6;
@@ -112,7 +113,7 @@
             // 
             // btn_rcv
             // 
-            this.btn_rcv.Location = new System.Drawing.Point(467, 125);
+            this.btn_rcv.Location = new System.Drawing.Point(571, 8);
             this.btn_rcv.Name = "btn_rcv";
             this.btn_rcv.Size = new System.Drawing.Size(71, 23);
             this.btn_rcv.TabIndex = 7;
@@ -148,11 +149,11 @@
             this.mainScreen.Controls.Add(this.statusImageLabel);
             this.mainScreen.Controls.Add(this.statusTextLabel);
             this.mainScreen.Controls.Add(this.btn_send);
-            this.mainScreen.Controls.Add(this.btn_disconnect);
+            this.mainScreen.Controls.Add(this.disconnectButton);
             this.mainScreen.Controls.Add(this.connectButton);
             this.mainScreen.Controls.Add(this.btn_clear);
             this.mainScreen.Controls.Add(this.btn_rcv);
-            this.mainScreen.Controls.Add(this.txt_log);
+            this.mainScreen.Controls.Add(txt_log);
             this.mainScreen.Controls.Add(this.txt_to_send);
             this.mainScreen.Location = new System.Drawing.Point(130, 4);
             this.mainScreen.Name = "mainScreen";
@@ -264,50 +265,52 @@
             this.digitDashboard.TabIndex = 14;
             this.digitDashboard.Text = "0,0";
             // 
-            // labelStatusImage
+            // statusImageLabel
             // 
             this.statusImageLabel.Image = global::FuelEconomy.Properties.Resources.Disconnected;
             this.statusImageLabel.Location = new System.Drawing.Point(3, 3);
             this.statusImageLabel.Margin = new System.Windows.Forms.Padding(0);
-            this.statusImageLabel.Name = "labelStatusImage";
+            this.statusImageLabel.Name = "statusImageLabel";
             this.statusImageLabel.Size = new System.Drawing.Size(20, 20);
             this.statusImageLabel.TabIndex = 11;
             this.statusImageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // labelStatusText
+            // statusTextLabel
             // 
             this.statusTextLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.statusTextLabel.Location = new System.Drawing.Point(23, 3);
             this.statusTextLabel.Margin = new System.Windows.Forms.Padding(0);
-            this.statusTextLabel.Name = "labelStatusText";
-            this.statusTextLabel.Size = new System.Drawing.Size(300, 20);
+            this.statusTextLabel.Name = "statusTextLabel";
+            this.statusTextLabel.Size = new System.Drawing.Size(437, 20);
             this.statusTextLabel.TabIndex = 10;
             this.statusTextLabel.Text = "Статус: Отключено";
             this.statusTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btn_send
             // 
-            this.btn_send.Location = new System.Drawing.Point(573, 125);
+            this.btn_send.Location = new System.Drawing.Point(463, 8);
             this.btn_send.Name = "btn_send";
             this.btn_send.Size = new System.Drawing.Size(75, 23);
             this.btn_send.TabIndex = 8;
             this.btn_send.Text = "Отправить";
             this.btn_send.UseVisualStyleBackColor = true;
+            this.btn_send.Click += new System.EventHandler(this.btn_send_Click);
             // 
-            // btn_disconnect
+            // disconnectButton
             // 
-            this.btn_disconnect.Location = new System.Drawing.Point(200, 523);
-            this.btn_disconnect.Name = "btn_disconnect";
-            this.btn_disconnect.Size = new System.Drawing.Size(89, 23);
-            this.btn_disconnect.TabIndex = 9;
-            this.btn_disconnect.Text = "Отключить";
-            this.btn_disconnect.UseVisualStyleBackColor = true;
-            this.btn_disconnect.Click += new System.EventHandler(this.btn_disconnect_Click_1);
+            this.disconnectButton.Location = new System.Drawing.Point(200, 523);
+            this.disconnectButton.Name = "disconnectButton";
+            this.disconnectButton.Size = new System.Drawing.Size(89, 23);
+            this.disconnectButton.TabIndex = 9;
+            this.disconnectButton.Text = "Отключить";
+            this.disconnectButton.UseVisualStyleBackColor = true;
+            this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
             // settingsScreen
             // 
             this.settingsScreen.BackColor = System.Drawing.Color.Transparent;
             this.settingsScreen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.settingsScreen.Controls.Add(this.buttonDefaultSettings);
             this.settingsScreen.Controls.Add(this.label3);
             this.settingsScreen.Controls.Add(this.inputInjectorPerformance);
             this.settingsScreen.Controls.Add(this.label2);
@@ -319,6 +322,16 @@
             this.settingsScreen.Size = new System.Drawing.Size(650, 552);
             this.settingsScreen.TabIndex = 1;
             this.settingsScreen.Text = "Настройки";
+            // 
+            // buttonDefaultSettings
+            // 
+            this.buttonDefaultSettings.Location = new System.Drawing.Point(293, 10);
+            this.buttonDefaultSettings.Name = "buttonDefaultSettings";
+            this.buttonDefaultSettings.Size = new System.Drawing.Size(94, 23);
+            this.buttonDefaultSettings.TabIndex = 11;
+            this.buttonDefaultSettings.Text = "По умолчанию";
+            this.buttonDefaultSettings.UseVisualStyleBackColor = true;
+            this.buttonDefaultSettings.Click += new System.EventHandler(this.buttonDefaultSettings_Click);
             // 
             // label3
             // 
@@ -340,6 +353,8 @@
             this.inputInjectorPerformance.Size = new System.Drawing.Size(44, 20);
             this.inputInjectorPerformance.TabIndex = 9;
             this.inputInjectorPerformance.Text = "0";
+            this.inputInjectorPerformance.TextChanged += new System.EventHandler(this.inputInjectorPerformance_TextChanged);
+            this.inputInjectorPerformance.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputInjectorPerformance_KeyPress);
             // 
             // label2
             // 
@@ -368,6 +383,7 @@
             this.cbPorts.TabIndex = 6;
             this.cbPorts.Text = "Не выбран";
             this.cbPorts.SelectedIndexChanged += new System.EventHandler(this.cbPorts_SelectedIndexChanged);
+            this.cbPorts.Click += new System.EventHandler(this.cbPorts_Click);
             // 
             // infoPage
             // 
@@ -388,7 +404,6 @@
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "MainForm";
             this.Text = "Fuel Economy";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl.ResumeLayout(false);
             this.mainScreen.ResumeLayout(false);
@@ -404,7 +419,7 @@
 
         private System.IO.Ports.SerialPort BluetoothSerial;
         private System.Windows.Forms.TextBox txt_to_send;
-        protected System.Windows.Forms.TextBox txt_log;
+        static public System.Windows.Forms.TextBox txt_log;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Button btn_clear;
         private System.Windows.Forms.Button btn_rcv;
@@ -414,9 +429,9 @@
         private System.Windows.Forms.ComboBox cbPorts;
         private System.Windows.Forms.TabPage infoPage;
         private System.Windows.Forms.Button btn_send;
-        private System.Windows.Forms.Button btn_disconnect;
-        protected System.Windows.Forms.Label statusTextLabel;
-        protected System.Windows.Forms.Label statusImageLabel;
+        private System.Windows.Forms.Button disconnectButton;
+        private System.Windows.Forms.Label statusTextLabel;
+        private System.Windows.Forms.Label statusImageLabel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox inputInjectorPerformance;
@@ -424,6 +439,7 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chartDashboard;
         private System.Windows.Forms.Label digitDashboardExtension;
         private System.Windows.Forms.Label digitDashboard;
+        private System.Windows.Forms.Button buttonDefaultSettings;
     }
 }
 

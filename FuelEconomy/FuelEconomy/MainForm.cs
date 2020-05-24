@@ -16,16 +16,13 @@ namespace FuelEconomy
     {
         private MySettings mySettings;
         private StatusBar statusBar;
+        private RemoteDevice remoteScanner;
         public MainForm()
         {
             InitializeComponent();
-            mySettings = new MySettings();
-            statusBar = new StatusBar(ref statusImageLabel, ref statusTextLabel);
-            if (mySettings.SelectedPort != null)
-                connectButton.Enabled = true;
             getCOMports();
-            BluetoothSerial.ReadTimeout = 6000;
-            BluetoothSerial.NewLine = "\n";
+            mySettings = new MySettings(ref connectButton);
+            statusBar = new StatusBar(ref statusImageLabel, ref statusTextLabel);
             tabControl.DrawItem += new DrawItemEventHandler(tabControl_DrawItem);
         }
 
@@ -66,19 +63,48 @@ namespace FuelEconomy
             _stringFlags.LineAlignment = StringAlignment.Center;
             g.DrawString(_tabPage.Text, _tabFont, _textBrush, _tabBounds, new StringFormat(_stringFlags));
         }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             mySettings.loadSettings();
         }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void inputInjectorPerformance_TextChanged(object sender, EventArgs e)
         {
-            mySettings.saveSettings();
+            UInt32 value;
+            if (UInt32.TryParse(inputInjectorPerformance.Text, out value))
+                mySettings.InjectorPerformance = value;
+            else
+                inputInjectorPerformance.Text = "0";
         }
+        private void inputInjectorPerformance_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
 
-        //***********************************************************************************
-        private void getCOMports()
+            if (!Char.IsDigit(number))
+            {
+                e.Handled = true;
+            }
+        }
+        private void buttonDefaultSettings_Click(object sender, EventArgs e)
+        {
+            inputInjectorPerformance.Text = "0";
+            cbPorts.SelectedItem = null;
+            mySettings.setSettingsToDefault();
+        }
+        private void cbPorts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbPorts.SelectedItem != null)
+                mySettings.SelectedPort = cbPorts.SelectedItem.ToString();
+            else
+                cbPorts.Text = "Не выбрано";
+        }
+        private void cbPorts_Click(object sender, EventArgs e)
+        {
+            List<string> COMlist = getCOMports();
+            cbPorts.Items.Clear();
+            cbPorts.Text = "Выберите порт";
+            cbPorts.Items.AddRange(COMlist.ToArray());
+        }
+        static public List<string> getCOMports()
         {
             string[] ports = SerialPort.GetPortNames();
             List<string> uniqPorts = new List<string>();
@@ -86,10 +112,10 @@ namespace FuelEconomy
             {
                 uniqPorts.Add(m);
             }
-            cbPorts.Items.Clear();
-            cbPorts.Text = "Выберите порт";
-            cbPorts.Items.AddRange(uniqPorts.ToArray());
+            return uniqPorts;
         }
+        //***********************************************************************************
+
 
         private void btn_send_Click(object sender, EventArgs e)
         {
@@ -119,42 +145,10 @@ namespace FuelEconomy
             //txt_log.AppendText(str + "\r\n");
         }
 
-        private void cbPorts_SelectedIndexChanged(object sender, EventArgs e)
+        private void connectButton_Click(object sender, EventArgs e)
         {
-            mySettings.SelectedPort = cbPorts.SelectedItem.ToString();
-            connectButton.Enabled = true;
-            mySettings.saveSettings();
-        }
-
-        private void btn_connect_Click(object sender, EventArgs e)
-        {
-            if (!BluetoothSerial.IsOpen)
-            {
-                BluetoothSerial.PortName = mySettings.SelectedPort;
-            }
-            else
-            {
-                txt_log.Text += "Порт ";
-                txt_log.Text += BluetoothSerial.PortName + " уже открыт, необходимо отключиться от порта";
-                txt_log.AppendText("\r\n");
-                return;
-            }
-            try { BluetoothSerial.Open(); }
-            catch 
-            {
-                
-                txt_log.AppendText("Ошибка, подключение к порту невозможно \r\n");
-                return;
-            }
-            
-            
-            if (BluetoothSerial.IsOpen)
-            {
-                statusBar.setStatus("Статус: Подключено");
-                txt_log.Text += "Подключено к порту: ";
-                txt_log.Text += BluetoothSerial.PortName;
-                txt_log.AppendText("\r\n");
-            }
+            remoteScanner = new RemoteDevice(ref BluetoothSerial, ref statusBar);
+            remoteScanner.connect(mySettings.SelectedPort);
         }
 
         private void btn_clear_Click(object sender, EventArgs e)
@@ -196,18 +190,21 @@ namespace FuelEconomy
             //txt_log.AppendText(s);
         }
 
-        private void btn_disconnect_Click_1(object sender, EventArgs e)
+        private void disconnectButton_Click(object sender, EventArgs e)
         {
             if (BluetoothSerial.IsOpen)
                 BluetoothSerial.Close();
 
             if (!BluetoothSerial.IsOpen)
             {
+                statusBar.setStatus("Отключено");
                 txt_log.Text += "Отключено от порта: ";
                 txt_log.Text += BluetoothSerial.PortName;
                 txt_log.AppendText("\r\n");
             }
         }
+
+
     }
 }
  
