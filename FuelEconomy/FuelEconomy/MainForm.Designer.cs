@@ -45,7 +45,7 @@
             this.BluetoothSerial = new System.IO.Ports.SerialPort(this.components);
             this.txt_to_send = new System.Windows.Forms.TextBox();
             this.txt_log = new System.Windows.Forms.TextBox();
-            this.btn_connect = new System.Windows.Forms.Button();
+            this.connectButton = new System.Windows.Forms.Button();
             this.btn_clear = new System.Windows.Forms.Button();
             this.btn_rcv = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
@@ -53,10 +53,8 @@
             this.chartDashboard = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.digitDashboardExtension = new System.Windows.Forms.Label();
             this.digitDashboard = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.labelStatusImage = new System.Windows.Forms.Label();
-            this.labelStatusText = new System.Windows.Forms.Label();
+            this.statusImageLabel = new System.Windows.Forms.Label();
+            this.statusTextLabel = new System.Windows.Forms.Label();
             this.btn_send = new System.Windows.Forms.Button();
             this.btn_disconnect = new System.Windows.Forms.Button();
             this.settingsScreen = new System.Windows.Forms.TabPage();
@@ -81,23 +79,24 @@
             // 
             // txt_log
             // 
-            this.txt_log.Location = new System.Drawing.Point(374, 328);
+            this.txt_log.Location = new System.Drawing.Point(332, 453);
             this.txt_log.Multiline = true;
             this.txt_log.Name = "txt_log";
             this.txt_log.ReadOnly = true;
             this.txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_log.Size = new System.Drawing.Size(274, 125);
+            this.txt_log.Size = new System.Drawing.Size(310, 93);
             this.txt_log.TabIndex = 2;
             // 
-            // btn_connect
+            // connectButton
             // 
-            this.btn_connect.Location = new System.Drawing.Point(60, 523);
-            this.btn_connect.Name = "btn_connect";
-            this.btn_connect.Size = new System.Drawing.Size(82, 23);
-            this.btn_connect.TabIndex = 4;
-            this.btn_connect.Text = "Подключить";
-            this.btn_connect.UseVisualStyleBackColor = true;
-            this.btn_connect.Click += new System.EventHandler(this.btn_connect_Click);
+            this.connectButton.Enabled = false;
+            this.connectButton.Location = new System.Drawing.Point(60, 523);
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Size = new System.Drawing.Size(82, 23);
+            this.connectButton.TabIndex = 4;
+            this.connectButton.Text = "Подключить";
+            this.connectButton.UseVisualStyleBackColor = true;
+            this.connectButton.Click += new System.EventHandler(this.btn_connect_Click);
             // 
             // btn_clear
             // 
@@ -146,13 +145,11 @@
             this.mainScreen.Controls.Add(this.chartDashboard);
             this.mainScreen.Controls.Add(this.digitDashboardExtension);
             this.mainScreen.Controls.Add(this.digitDashboard);
-            this.mainScreen.Controls.Add(this.button2);
-            this.mainScreen.Controls.Add(this.button1);
-            this.mainScreen.Controls.Add(this.labelStatusImage);
-            this.mainScreen.Controls.Add(this.labelStatusText);
+            this.mainScreen.Controls.Add(this.statusImageLabel);
+            this.mainScreen.Controls.Add(this.statusTextLabel);
             this.mainScreen.Controls.Add(this.btn_send);
             this.mainScreen.Controls.Add(this.btn_disconnect);
-            this.mainScreen.Controls.Add(this.btn_connect);
+            this.mainScreen.Controls.Add(this.connectButton);
             this.mainScreen.Controls.Add(this.btn_clear);
             this.mainScreen.Controls.Add(this.btn_rcv);
             this.mainScreen.Controls.Add(this.txt_log);
@@ -267,46 +264,26 @@
             this.digitDashboard.TabIndex = 14;
             this.digitDashboard.Text = "0,0";
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(557, 480);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 13;
-            this.button2.Text = "загрузить";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(557, 509);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "сохранить";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // labelStatusImage
             // 
-            this.labelStatusImage.Image = global::FuelEconomy.Properties.Resources.Disconnected;
-            this.labelStatusImage.Location = new System.Drawing.Point(3, 3);
-            this.labelStatusImage.Margin = new System.Windows.Forms.Padding(0);
-            this.labelStatusImage.Name = "labelStatusImage";
-            this.labelStatusImage.Size = new System.Drawing.Size(20, 20);
-            this.labelStatusImage.TabIndex = 11;
-            this.labelStatusImage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.statusImageLabel.Image = global::FuelEconomy.Properties.Resources.Disconnected;
+            this.statusImageLabel.Location = new System.Drawing.Point(3, 3);
+            this.statusImageLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.statusImageLabel.Name = "labelStatusImage";
+            this.statusImageLabel.Size = new System.Drawing.Size(20, 20);
+            this.statusImageLabel.TabIndex = 11;
+            this.statusImageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelStatusText
             // 
-            this.labelStatusText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.labelStatusText.Location = new System.Drawing.Point(23, 3);
-            this.labelStatusText.Margin = new System.Windows.Forms.Padding(0);
-            this.labelStatusText.Name = "labelStatusText";
-            this.labelStatusText.Size = new System.Drawing.Size(300, 20);
-            this.labelStatusText.TabIndex = 10;
-            this.labelStatusText.Text = "Статус: Отключено";
-            this.labelStatusText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.statusTextLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.statusTextLabel.Location = new System.Drawing.Point(23, 3);
+            this.statusTextLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.statusTextLabel.Name = "labelStatusText";
+            this.statusTextLabel.Size = new System.Drawing.Size(300, 20);
+            this.statusTextLabel.TabIndex = 10;
+            this.statusTextLabel.Text = "Статус: Отключено";
+            this.statusTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btn_send
             // 
@@ -428,7 +405,7 @@
         private System.IO.Ports.SerialPort BluetoothSerial;
         private System.Windows.Forms.TextBox txt_to_send;
         protected System.Windows.Forms.TextBox txt_log;
-        private System.Windows.Forms.Button btn_connect;
+        private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Button btn_clear;
         private System.Windows.Forms.Button btn_rcv;
         private System.Windows.Forms.TabControl tabControl;
@@ -438,10 +415,8 @@
         private System.Windows.Forms.TabPage infoPage;
         private System.Windows.Forms.Button btn_send;
         private System.Windows.Forms.Button btn_disconnect;
-        private System.Windows.Forms.Label labelStatusText;
-        private System.Windows.Forms.Label labelStatusImage;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        protected System.Windows.Forms.Label statusTextLabel;
+        protected System.Windows.Forms.Label statusImageLabel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox inputInjectorPerformance;
