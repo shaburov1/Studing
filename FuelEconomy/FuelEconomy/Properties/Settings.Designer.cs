@@ -8,14 +8,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-
 namespace FuelEconomy.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.5.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
@@ -28,21 +26,21 @@ namespace FuelEconomy.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("null")]
-        public string lastPort {
+        public string linkPort {
             get {
-                return ((string)(this["lastPort"]));
+                return ((string)(this["linkPort"]));
             }
             set {
-                this["lastPort"] = value;
+                this["linkPort"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public UInt32 injectorPerformance {
+        public uint injectorPerformance {
             get {
-                return ((UInt32)(this["injectorPerformance"]));
+                return ((uint)(this["injectorPerformance"]));
             }
             set {
                 this["injectorPerformance"] = value;

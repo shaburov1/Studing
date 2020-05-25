@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FuelEconomy
@@ -13,10 +9,14 @@ namespace FuelEconomy
         private string selectedPort = null;
         private UInt32 injectorPerformance = 0;
         private Button connectButton = null;
+        private ComboBox cbPorts = null;
+        private TextBox injPerformanceTextBox = null;
 
-        public MySettings(ref Button connBut)
+        public MySettings(ref Button connBut, ref ComboBox cb, ref TextBox tb)
         {
             connectButton = connBut;
+            cbPorts = cb;
+            injPerformanceTextBox = tb;
         }
         public string SelectedPort
         {
@@ -25,7 +25,7 @@ namespace FuelEconomy
                 return selectedPort;
             }
             set
-            {                    
+            {
                 selectedPort = value;
                 if (selectedPort != null)
                     connectButton.Enabled = true;
@@ -51,24 +51,30 @@ namespace FuelEconomy
         public void loadSettings()
         {
             List<string> ports = MainForm.getCOMports();
-            if (ports.Contains(Properties.Settings.Default.lastPort))
-                SelectedPort = Properties.Settings.Default.lastPort;
+            if (ports.Contains(Properties.Settings.Default.linkPort))
+                SelectedPort = Properties.Settings.Default.linkPort;
             else
                 SelectedPort = null;
-
             InjectorPerformance = Properties.Settings.Default.injectorPerformance;
+
+            cbPorts.SelectedItem = SelectedPort;
+            injPerformanceTextBox.Text = InjectorPerformance.ToString();
         }
 
         public void saveSettings()
         {
-            Properties.Settings.Default.lastPort = SelectedPort;
+            Properties.Settings.Default.linkPort = SelectedPort;
             Properties.Settings.Default.injectorPerformance = InjectorPerformance;
+            Properties.Settings.Default.Save();
         }
 
         public void setSettingsToDefault()
         {
-            this.SelectedPort = null;
-            this.InjectorPerformance = 0;
+            SelectedPort = null;
+            InjectorPerformance = 0;
+
+            cbPorts.SelectedItem = SelectedPort;
+            injPerformanceTextBox.Text = "0";
         }
     }
 }

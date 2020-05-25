@@ -419,7 +419,7 @@
 
         private System.IO.Ports.SerialPort BluetoothSerial;
         private System.Windows.Forms.TextBox txt_to_send;
-        static public System.Windows.Forms.TextBox txt_log;
+        private System.Windows.Forms.TextBox txt_log;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Button btn_clear;
         private System.Windows.Forms.Button btn_rcv;

@@ -2,10 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FuelEconomy.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="lastPort" Type="System.String" Scope="User">
+    <Setting Name="linkPort" Type="System.String" Scope="User">
       <Value Profile="(Default)">null</Value>
     </Setting>
-    <Setting Name="injectorPerformance" Type="System.Single" Scope="User">
+    <Setting Name="injectorPerformance" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

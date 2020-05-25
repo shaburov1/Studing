@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FuelEconomy
@@ -21,7 +17,7 @@ namespace FuelEconomy
         {
             InitializeComponent();
             getCOMports();
-            mySettings = new MySettings(ref connectButton);
+            mySettings = new MySettings(ref connectButton, ref cbPorts, ref inputInjectorPerformance);
             statusBar = new StatusBar(ref statusImageLabel, ref statusTextLabel);
             tabControl.DrawItem += new DrawItemEventHandler(tabControl_DrawItem);
         }
@@ -41,7 +37,7 @@ namespace FuelEconomy
             Rectangle _tabBounds = tabControl.GetTabRect(e.Index);
 
             //используем другой шрифт
-            Font _tabFont; 
+            Font _tabFont;
 
             if (e.State == DrawItemState.Selected)
             {
@@ -86,8 +82,6 @@ namespace FuelEconomy
         }
         private void buttonDefaultSettings_Click(object sender, EventArgs e)
         {
-            inputInjectorPerformance.Text = "0";
-            cbPorts.SelectedItem = null;
             mySettings.setSettingsToDefault();
         }
         private void cbPorts_SelectedIndexChanged(object sender, EventArgs e)
@@ -103,6 +97,11 @@ namespace FuelEconomy
             cbPorts.Items.Clear();
             cbPorts.Text = "Выберите порт";
             cbPorts.Items.AddRange(COMlist.ToArray());
+        }
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            remoteScanner = new RemoteDevice(ref BluetoothSerial, ref statusBar);
+            remoteScanner.connect(mySettings.SelectedPort);
         }
         static public List<string> getCOMports()
         {
@@ -125,7 +124,7 @@ namespace FuelEconomy
                 str = txt_to_send.Text + "\r";
                 BluetoothSerial.WriteLine(str);
             }
-            txt_log.Text += "Отправлено: "  + str.Length + " байт" + "\r\n";
+            txt_log.Text += "Отправлено: " + str.Length + " байт" + "\r\n";
             txt_log.Text += txt_to_send.Text;
             txt_log.AppendText("\r\n");
 
@@ -143,12 +142,6 @@ namespace FuelEconomy
             //        str += "\n";
             //}
             //txt_log.AppendText(str + "\r\n");
-        }
-
-        private void connectButton_Click(object sender, EventArgs e)
-        {
-            remoteScanner = new RemoteDevice(ref BluetoothSerial, ref statusBar);
-            remoteScanner.connect(mySettings.SelectedPort);
         }
 
         private void btn_clear_Click(object sender, EventArgs e)
@@ -207,4 +200,3 @@ namespace FuelEconomy
 
     }
 }
- 
