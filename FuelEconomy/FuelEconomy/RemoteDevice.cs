@@ -1,55 +1,53 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Windows.Forms;
+using System.Threading;
 
 namespace FuelEconomy
 {
     class RemoteDevice
     {
         private MyLinkHandler link = null;
-        private Parser parser = null;
         private SerialPort port = null;
         private StatusBar statusBar = null;
-        public RemoteDevice(ref SerialPort sp, ref StatusBar sb)
+        private Dashboard dashboard = null;
+        private MySettings mySettings = null;
+        private bool allowWork = false;
+        private double fuelRate = 0;
+        private int errorCount = 0;
+        enum RequestType
+        {
+            byPID,
+            byMAP,
+            byInjectorTiming
+        }
+        private RequestType requestType = RequestType.byPID;
+        private double FuelRate
+        {
+            get
+            {
+                return fuelRate;
+            }
+            set
+            {
+                fuelRate = value;
+                dashboard.addNextparam(fuelRate);
+            }
+        }
+        public RemoteDevice(ref SerialPort sp, ref StatusBar sb, ref Dashboard db, ref MySettings ms)
         {
             statusBar = sb;
             port = sp;
+            dashboard = db;
+            mySettings = ms;
 
             //настроим порт
             port.ReadTimeout = 6000;
             port.NewLine = "\n";
 
+            Thread work = new Thread(getData);
+            work.Start();
             link = new MyLinkHandler(ref sp);
-            parser = new Parser();
         }
-
-        public void connect(string portName)
-        {
-            if (!port.IsOpen)
-            {
-                port.PortName = portName;
-            }
-            else
-            {
-                string str = "Ошибка. Порт " + port.PortName + " уже открыт, необходимо отключиться от порта";
-                statusBar.setStatus(str);
-            }
-            try { port.Open(); }
-            catch
-            {
-                statusBar.setStatus("Ошибка, подключение к порту невозможно");
-            }
-
-            if (port.IsOpen)
-            {
-                if (verifyConnection())
-                    statusBar.setStatus($"Подключено к порту {port.PortName}");
-                else
-                    statusBar.setStatus("Ошибка, устройство не прошло проверку. Неизвестное устройство");
-            }
-
-        }
-
         private bool verifyConnection()
         {
             if (!link.send("atz"))
@@ -61,40 +59,200 @@ namespace FuelEconomy
             else
                 return false;
         }
+        private void getData()
+        {
+            while (true)
+            {
+                if (allowWork)
+                {
+                    switch (requestType)
+                    {
+                        case RequestType.byPID: casePID(); break;
+                        case RequestType.byMAP: caseMAP(); break;
+                        case RequestType.byInjectorTiming: caseInjectorTiming(); break;
+                    }
+                }
+                Thread.Sleep(200);
+            }
+        }
+        private void casePID()
+        {
+            string fuelRateStr = link.getData("015E");
+            double fuelRate = 0;
+            try { fuelRate = Convert.ToInt32(fuelRateStr, 16) * 0.05; }
+            catch {}
+            if (fuelRate == 0)
+                errorCount++;
+            else
+            {
+                FuelRate = fuelRate;
+                errorCount = 0;
+            }
+            if(errorCount > 5)
+            {
+                FuelRate = 0;
+                errorCount = 0;
+                requestType = RequestType.byMAP;
+                return;
+            }
+        }
+        private void caseMAP()
+        {
+            /*  IAT - Intake Air Temperature in Kelvin - 283
+             *  R - Specific Gas Constant (8.314472 J/(mol.K)
+             *  MM - Average molecular mass of air (28.9644 g/mol)
+             *  VE - volumetric efficiency measured in percent, let's say 85%
+             *  ED - Engine Displacement in liters 1.396л.
+             *  IMAP = RPM*MAP/IAT;
+             *  MAF = (IMAP/120)*(VE/100)*(ED)*(MM)/(R);
+             *
+             *  AirFuelRatio = 14.7; // For gasoline vehicles
+             *  FuelDensityGramsPerLiter = 720; // For gasoline vehicles
+             *
+             *  FuelFlowGramsPerSecond = MAF / AirFuelRatio;
+             *  FuelFlowLitersPerSecond = FuelFlowGramsPerSecond / FuelDensityGramsPerLiter;
+             *
+             *  LPH = FuelFlowLitersPerSecond * 3600; // Convert to liters per hour
+             */
+            Random rnd = new Random();
+            const double R = 8.314;
+            const double ED = 1.396;
+            const double MM = 28.9644;
+            const int VE = 85;
+            const double AirFuelRatio = 14.7;
+            const int FuelDensityGramsPerLiter = 720;
 
+            //запросим обороты двигателя
+            //string strRPM = link.getData("010C");
+            int rpm = 0; rpm = rnd.Next(730, 3000);
+            //try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
+            //catch { }
+
+            //string MAP = link.getData("010B");
+            int map = 0; map = rnd.Next(24, 30);
+            //try { map = Convert.ToInt32(MAP, 16); }
+            //catch { }
+
+            //string IAT = link.getData("010F");
+            int iat = 0; iat = rnd.Next(80, 90);
+            //try { iat = Convert.ToInt32(IAT, 16) + 273; }
+            //catch { }
+
+            if (rpm == 0 || map == 0 || iat == 0)
+            {
+                errorCount++;
+            }
+            else
+            {
+                double IMAP = (double)rpm * (double)map / (double)iat;
+                double MAF = (IMAP / 120.0) * ((double)VE / 100.0) * ED * MM / R;
+                double FuelFlowGramsPerSecond = MAF / AirFuelRatio;
+                double FuelFlowLitersPerSecond = FuelFlowGramsPerSecond / FuelDensityGramsPerLiter;
+                FuelRate = FuelFlowLitersPerSecond * 3600;
+                errorCount = 0;
+            }
+
+            if (errorCount > 5)
+            {
+                FuelRate = 0;
+                errorCount = 0;
+                requestType = RequestType.byInjectorTiming;
+            }
+        }
+        private void caseInjectorTiming()
+        {
+            if(mySettings.InjectorPerformance == 0)
+            {
+                FuelRate = 0;
+                errorCount = 0;
+                requestType = RequestType.byPID;
+                return;
+            }
+
+            string injTimingStr = link.getData("A029");
+            injTimingStr = injTimingStr.Replace("E0", "");
+            double injTime = 0;
+            try { injTime = Convert.ToInt32(injTimingStr, 16) /1000.0; }
+            catch { }
+
+            string strRPM = link.getData("010C");
+            int rpm = 0;
+            try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
+            catch { }
+
+            if (injTime == 0 || rpm == 0)
+                errorCount++;
+            else
+            {
+                FuelRate = (double)rpm * injTime * (double)mySettings.InjectorPerformance / 1000.0;
+                errorCount = 0;
+            }
+
+            if (errorCount > 5)
+            {
+                FuelRate = 0;
+                errorCount = 0;
+                requestType = RequestType.byPID;
+            }
+        }
+        public bool connect(string portName)
+        {
+            if (!port.IsOpen)
+            {
+                port.PortName = portName;
+            }
+            else
+            {
+                string str = "Ошибка. Порт " + port.PortName + " уже открыт, необходимо отключиться от порта";
+                statusBar.setStatus(str);
+                return false;
+            }
+            try { port.Open(); }
+            catch
+            {
+                statusBar.setStatus("Ошибка, подключение к порту невозможно");
+                return false;
+            }
+
+            if (port.IsOpen)
+            {
+                if (verifyConnection())
+                {
+                    statusBar.setStatus($"Подключено к порту {port.PortName}");
+                    return true;
+                }
+                else
+                    statusBar.setStatus("Ошибка, устройство не прошло проверку. Неизвестное устройство");
+            }
+            return false;
+        }
         public bool init()
         {
+            bool res = true;
             string answer = "";
-            link.send("ATSP3");
+            link.send("ATSP0");
             link.getAnswer(ref answer, 5000);
             if (!answer.Contains("OK"))
-                return false;
+                res = false;
+
             link.send("ATE0");
             link.getAnswer(ref answer, 5000);
             if (!answer.Contains("OK"))
-                return false;
-            return true;
-        }
+                res = false;
 
-        public void send(string str, ref TextBox txt)
-        {
-            link.send(str);
-            string answer = "";
-            link.getAnswer(ref answer, 5000);
-            txt.AppendText(answer + "\n");
+            if (!res)
+                statusBar.setStatus("Ошибка. Невозможно инициализировать сканер.");
+            return res;
         }
-
-        public void getData(string str, ref TextBox txt)
+        public void startWork()
         {
-            string res = link.getData(str);
-            int rpm = 0;
-            try { rpm = Convert.ToInt32(res, 16); }
-            catch
-            {
-                
-            }
-            txt.AppendText(res + "\n");
-            txt.AppendText(rpm + "rpm \n");
+            allowWork = true;
+        }
+        public void stopWork()
+        {
+            allowWork = false;
+            FuelRate = 0;
         }
     }
 }
+

@@ -31,21 +31,15 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.BluetoothSerial = new System.IO.Ports.SerialPort(this.components);
-            this.txt_to_send = new System.Windows.Forms.TextBox();
-            this.txt_log = new System.Windows.Forms.TextBox();
+            this.adapterPort = new System.IO.Ports.SerialPort(this.components);
             this.connectButton = new System.Windows.Forms.Button();
-            this.btn_clear = new System.Windows.Forms.Button();
-            this.btn_rcv = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.mainScreen = new System.Windows.Forms.TabPage();
-            this.startchart = new System.Windows.Forms.Button();
             this.chartDashboard = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.digitDashboardExtension = new System.Windows.Forms.Label();
             this.digitDashboard = new System.Windows.Forms.Label();
             this.statusImageLabel = new System.Windows.Forms.Label();
             this.statusTextLabel = new System.Windows.Forms.Label();
-            this.btn_send = new System.Windows.Forms.Button();
             this.disconnectButton = new System.Windows.Forms.Button();
             this.settingsScreen = new System.Windows.Forms.TabPage();
             this.buttonDefaultSettings = new System.Windows.Forms.Button();
@@ -61,55 +55,16 @@
             this.settingsScreen.SuspendLayout();
             this.SuspendLayout();
             // 
-            // txt_to_send
-            // 
-            this.txt_to_send.Location = new System.Drawing.Point(463, 46);
-            this.txt_to_send.Name = "txt_to_send";
-            this.txt_to_send.Size = new System.Drawing.Size(181, 20);
-            this.txt_to_send.TabIndex = 1;
-            // 
-            // txt_log
-            // 
-            this.txt_log.Location = new System.Drawing.Point(332, 453);
-            this.txt_log.Multiline = true;
-            this.txt_log.Name = "txt_log";
-            this.txt_log.ReadOnly = true;
-            this.txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_log.Size = new System.Drawing.Size(310, 93);
-            this.txt_log.TabIndex = 2;
-            // 
             // connectButton
             // 
             this.connectButton.Enabled = false;
-            this.connectButton.Location = new System.Drawing.Point(60, 523);
+            this.connectButton.Location = new System.Drawing.Point(104, 478);
             this.connectButton.Name = "connectButton";
             this.connectButton.Size = new System.Drawing.Size(82, 23);
             this.connectButton.TabIndex = 4;
             this.connectButton.Text = "Подключить";
             this.connectButton.UseVisualStyleBackColor = true;
             this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
-            // 
-            // btn_clear
-            // 
-            this.btn_clear.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btn_clear.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btn_clear.Location = new System.Drawing.Point(574, 72);
-            this.btn_clear.Name = "btn_clear";
-            this.btn_clear.Size = new System.Drawing.Size(70, 23);
-            this.btn_clear.TabIndex = 6;
-            this.btn_clear.Text = "Очистить";
-            this.btn_clear.UseVisualStyleBackColor = true;
-            this.btn_clear.Click += new System.EventHandler(this.btn_clear_Click);
-            // 
-            // btn_rcv
-            // 
-            this.btn_rcv.Location = new System.Drawing.Point(571, 8);
-            this.btn_rcv.Name = "btn_rcv";
-            this.btn_rcv.Size = new System.Drawing.Size(71, 23);
-            this.btn_rcv.TabIndex = 7;
-            this.btn_rcv.Text = "Принять";
-            this.btn_rcv.UseVisualStyleBackColor = true;
-            this.btn_rcv.Click += new System.EventHandler(this.btn_rcv_Click);
             // 
             // tabControl
             // 
@@ -126,43 +81,27 @@
             this.tabControl.Multiline = true;
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(784, 560);
+            this.tabControl.Size = new System.Drawing.Size(664, 560);
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 8;
             // 
             // mainScreen
             // 
             this.mainScreen.BackColor = System.Drawing.Color.Transparent;
-            this.mainScreen.Controls.Add(this.startchart);
             this.mainScreen.Controls.Add(this.chartDashboard);
             this.mainScreen.Controls.Add(this.digitDashboardExtension);
             this.mainScreen.Controls.Add(this.digitDashboard);
             this.mainScreen.Controls.Add(this.statusImageLabel);
             this.mainScreen.Controls.Add(this.statusTextLabel);
-            this.mainScreen.Controls.Add(this.btn_send);
             this.mainScreen.Controls.Add(this.disconnectButton);
             this.mainScreen.Controls.Add(this.connectButton);
-            this.mainScreen.Controls.Add(this.btn_clear);
-            this.mainScreen.Controls.Add(this.btn_rcv);
-            this.mainScreen.Controls.Add(this.txt_log);
-            this.mainScreen.Controls.Add(this.txt_to_send);
             this.mainScreen.Location = new System.Drawing.Point(130, 4);
             this.mainScreen.Name = "mainScreen";
             this.mainScreen.Padding = new System.Windows.Forms.Padding(3);
-            this.mainScreen.Size = new System.Drawing.Size(650, 552);
+            this.mainScreen.Size = new System.Drawing.Size(530, 552);
             this.mainScreen.TabIndex = 0;
             this.mainScreen.Tag = "";
             this.mainScreen.Text = "Устройство";
-            // 
-            // startchart
-            // 
-            this.startchart.Location = new System.Drawing.Point(463, 72);
-            this.startchart.Name = "startchart";
-            this.startchart.Size = new System.Drawing.Size(75, 23);
-            this.startchart.TabIndex = 17;
-            this.startchart.Text = "startchart";
-            this.startchart.UseVisualStyleBackColor = true;
-            this.startchart.Click += new System.EventHandler(this.startchart_Click);
             // 
             // chartDashboard
             // 
@@ -245,7 +184,7 @@
             // statusTextLabel
             // 
             this.statusTextLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.statusTextLabel.Location = new System.Drawing.Point(23, 3);
+            this.statusTextLabel.Location = new System.Drawing.Point(25, 3);
             this.statusTextLabel.Margin = new System.Windows.Forms.Padding(0);
             this.statusTextLabel.Name = "statusTextLabel";
             this.statusTextLabel.Size = new System.Drawing.Size(437, 20);
@@ -253,19 +192,9 @@
             this.statusTextLabel.Text = "Статус: Отключено";
             this.statusTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btn_send
-            // 
-            this.btn_send.Location = new System.Drawing.Point(463, 8);
-            this.btn_send.Name = "btn_send";
-            this.btn_send.Size = new System.Drawing.Size(75, 23);
-            this.btn_send.TabIndex = 8;
-            this.btn_send.Text = "Отправить";
-            this.btn_send.UseVisualStyleBackColor = true;
-            this.btn_send.Click += new System.EventHandler(this.btn_send_Click);
-            // 
             // disconnectButton
             // 
-            this.disconnectButton.Location = new System.Drawing.Point(200, 523);
+            this.disconnectButton.Location = new System.Drawing.Point(323, 478);
             this.disconnectButton.Name = "disconnectButton";
             this.disconnectButton.Size = new System.Drawing.Size(89, 23);
             this.disconnectButton.TabIndex = 9;
@@ -286,7 +215,7 @@
             this.settingsScreen.Location = new System.Drawing.Point(130, 4);
             this.settingsScreen.Name = "settingsScreen";
             this.settingsScreen.Padding = new System.Windows.Forms.Padding(3);
-            this.settingsScreen.Size = new System.Drawing.Size(650, 552);
+            this.settingsScreen.Size = new System.Drawing.Size(530, 552);
             this.settingsScreen.TabIndex = 1;
             this.settingsScreen.Text = "Настройки";
             // 
@@ -356,7 +285,7 @@
             // 
             this.infoPage.Location = new System.Drawing.Point(130, 4);
             this.infoPage.Name = "infoPage";
-            this.infoPage.Size = new System.Drawing.Size(650, 552);
+            this.infoPage.Size = new System.Drawing.Size(530, 552);
             this.infoPage.TabIndex = 2;
             this.infoPage.Text = "Инфо";
             // 
@@ -364,11 +293,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(784, 562);
+            this.ClientSize = new System.Drawing.Size(664, 562);
             this.Controls.Add(this.tabControl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1024, 768);
-            this.MinimumSize = new System.Drawing.Size(640, 480);
+            this.MaximumSize = new System.Drawing.Size(680, 600);
+            this.MinimumSize = new System.Drawing.Size(680, 600);
             this.Name = "MainForm";
             this.Text = "Fuel Economy";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -383,18 +312,13 @@
         }
 
         #endregion
-        private System.IO.Ports.SerialPort BluetoothSerial;
-        private System.Windows.Forms.TextBox txt_to_send;
-        private System.Windows.Forms.TextBox txt_log;
+        private System.IO.Ports.SerialPort adapterPort;
         private System.Windows.Forms.Button connectButton;
-        private System.Windows.Forms.Button btn_clear;
-        private System.Windows.Forms.Button btn_rcv;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage mainScreen;
         private System.Windows.Forms.TabPage settingsScreen;
         private System.Windows.Forms.ComboBox cbPorts;
         private System.Windows.Forms.TabPage infoPage;
-        private System.Windows.Forms.Button btn_send;
         private System.Windows.Forms.Button disconnectButton;
         private System.Windows.Forms.Label statusTextLabel;
         private System.Windows.Forms.Label statusImageLabel;
@@ -406,7 +330,6 @@
         private System.Windows.Forms.Label digitDashboardExtension;
         private System.Windows.Forms.Label digitDashboard;
         private System.Windows.Forms.Button buttonDefaultSettings;
-        private System.Windows.Forms.Button startchart;
     }
 }
 

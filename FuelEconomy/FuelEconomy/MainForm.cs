@@ -13,13 +13,11 @@ namespace FuelEconomy
     {
         private MySettings mySettings;
         private StatusBar statusBar;
-        private RemoteDevice remoteScanner;
+        private RemoteDevice remoteScaner;
         private Dashboard dashboard;
-        private double a = 0.0;
         public MainForm()
         {
             InitializeComponent();
-            getCOMports();
             mySettings = new MySettings(ref connectButton, ref cbPorts, ref inputInjectorPerformance);
             statusBar = new StatusBar(ref statusImageLabel, ref statusTextLabel);
             dashboard = new Dashboard(ref chartDashboard, ref digitDashboard);
@@ -105,10 +103,25 @@ namespace FuelEconomy
         }
         private void connectButton_Click(object sender, EventArgs e)
         {
-            remoteScanner = new RemoteDevice(ref BluetoothSerial, ref statusBar);
-            remoteScanner.connect(mySettings.SelectedPort);
-            if (remoteScanner.init())
-                txt_log.AppendText("ljahalkodf");
+            remoteScaner = new RemoteDevice(ref adapterPort, ref statusBar, ref dashboard, ref mySettings);
+            if(!remoteScaner.connect(mySettings.SelectedPort))
+                return;
+            if (!remoteScaner.init())
+                return;
+            dashboard.startChartWork();
+            remoteScaner.startWork();
+        }
+        private void disconnectButton_Click(object sender, EventArgs e)
+        {
+            if (adapterPort.IsOpen)
+                adapterPort.Close();
+
+            if (!adapterPort.IsOpen)
+            {
+                statusBar.setStatus("Отключено");
+                dashboard.stopChartWork();
+                remoteScaner.stopWork();
+            }
         }
         static public List<string> getCOMports()
         {
@@ -119,48 +132,6 @@ namespace FuelEconomy
                 uniqPorts.Add(m);
             }
             return uniqPorts;
-        }
-        //***********************************************************************************
-
-
-        private void btn_send_Click(object sender, EventArgs e)
-        {
-            string str = "";
-            if (txt_to_send.TextLength != 0)
-            {
-                str = txt_to_send.Text + "\r";
-                remoteScanner.getData(str, ref txt_log);
-            }
-        }
-
-        private void btn_clear_Click(object sender, EventArgs e)
-        {
-            txt_log.Clear();
-        }
-
-        private void btn_rcv_Click(object sender, EventArgs e)
-        {
-            //string s = "";
-            //rcvMsg(ref s);
-            //txt_log.AppendText(s);
-            dashboard.addNextparam(a+=0.3);
-        }
-
-        private void disconnectButton_Click(object sender, EventArgs e)
-        {
-            if (BluetoothSerial.IsOpen)
-                BluetoothSerial.Close();
-
-            if (!BluetoothSerial.IsOpen)
-            {
-                statusBar.setStatus("Отключено");
-                dashboard.stopChart();
-            }
-        }
-
-        private void startchart_Click(object sender, EventArgs e)
-        {
-            dashboard.startChart();
         }
     }
 }

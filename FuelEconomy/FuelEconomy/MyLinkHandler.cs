@@ -24,6 +24,7 @@ namespace FuelEconomy
             {
                 if (request.Length != 0)
                 {
+                    request += "\r";
                     linkPort.WriteLine(request);
                 }
             }

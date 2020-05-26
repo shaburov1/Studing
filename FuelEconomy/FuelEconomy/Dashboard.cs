@@ -11,7 +11,7 @@ namespace FuelEconomy
         private Chart chartDashboard = null;
         private Label digitDashboard = null;
         double fuelRate;
-        private bool allowWork = false;
+        private bool isAllowed = false;
         private double FuelRate 
         {
             get
@@ -24,6 +24,7 @@ namespace FuelEconomy
                 fuelRate = value;
                 string str = value.ToString();
                 digitDashboard.Text = str.Contains(",") ? str : str + ",0";
+                Thread.Sleep(100);
             }
         }
         private System.Timers.Timer tm;
@@ -32,15 +33,15 @@ namespace FuelEconomy
 
         private Series s = new Series();
         private DataPoint dp0 = new DataPoint(1, 0);
-        private DataPoint dp1 = new DataPoint(2, 1);
-        private DataPoint dp2 = new DataPoint(3, 2);
-        private DataPoint dp3 = new DataPoint(4, 3);
-        private DataPoint dp4 = new DataPoint(5, 4);
-        private DataPoint dp5 = new DataPoint(6, 5);
-        private DataPoint dp6 = new DataPoint(7, 4);
-        private DataPoint dp7 = new DataPoint(8, 3);
-        private DataPoint dp8 = new DataPoint(9, 2);
-        private DataPoint dp9 = new DataPoint(10, 1);
+        private DataPoint dp1 = new DataPoint(2, 0);
+        private DataPoint dp2 = new DataPoint(3, 0);
+        private DataPoint dp3 = new DataPoint(4, 0);
+        private DataPoint dp4 = new DataPoint(5, 0);
+        private DataPoint dp5 = new DataPoint(6, 0);
+        private DataPoint dp6 = new DataPoint(7, 0);
+        private DataPoint dp7 = new DataPoint(8, 0);
+        private DataPoint dp8 = new DataPoint(9, 0);
+        private DataPoint dp9 = new DataPoint(10, 0);
         public Dashboard(ref Chart cdb, ref Label ddb)
         {
             chartDashboard = cdb;
@@ -68,14 +69,14 @@ namespace FuelEconomy
             FuelRate = param;
         }
 
-        public void startChart()
+        public void startChartWork()
         {
-            allowWork = true;
+            isAllowed = true;
         }
 
-        public void stopChart()
+        public void stopChartWork()
         {
-            allowWork = false;
+            isAllowed = false;
         }
 
         private void chartWork()
@@ -86,12 +87,12 @@ namespace FuelEconomy
             int averIterationCount = 0;
             while (true)
             {
-                if (allowWork)
+                if (isAllowed)
                 {
                     tm.Start();
                     while (!isTimeElapsed)
                     {
-                        if (!allowWork)
+                        if (!isAllowed)
                             break;
 
                         if (FuelRate != previousFuelRateValue)
@@ -102,15 +103,18 @@ namespace FuelEconomy
                             previousFuelRateValue = FuelRate;
                         }
                         s.Points[0].YValues[0] = average;
+
                         chartDashboard.Series.Remove(s);
                         chartDashboard.Series.Insert(0, s);
-                        chartDashboard.ChartAreas[0].RecalculateAxesScale();
                         Thread.Sleep(100);
                     }
                     rollChart(average);
+                    chartDashboard.ChartAreas[0].RecalculateAxesScale();
+
+                    s.Points[0].YValues[0] = 0;
+                    chartDashboard.Update();
 
                     previousFuelRateValue = 0;
-                    FuelRate = 0;
                     summ = 0;
                     average = 0;
                     averIterationCount = 0;
