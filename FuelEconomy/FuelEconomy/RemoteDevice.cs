@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FuelEconomy
 {
@@ -20,7 +16,7 @@ namespace FuelEconomy
             port = sp;
 
             //настроим порт
-            port.ReadTimeout = 3000;
+            port.ReadTimeout = 6000;
             port.NewLine = "\n";
 
             link = new MyLinkHandler(ref sp);
@@ -46,24 +42,59 @@ namespace FuelEconomy
 
             if (port.IsOpen)
             {
-                if (verify())
+                if (verifyConnection())
                     statusBar.setStatus($"Подключено к порту {port.PortName}");
                 else
-                    statusBar.setStatus("Ошибка, устройство не прошло проверку");
+                    statusBar.setStatus("Ошибка, устройство не прошло проверку. Неизвестное устройство");
             }
 
         }
 
-        private bool verify()
+        private bool verifyConnection()
         {
-            if(!link.send("atz"))
+            if (!link.send("atz"))
                 return false;
             string str = "";
-            link.getAnswer(ref str, 1000);
-            if(str.Contains("ELM327 v1.5"))
+            link.getAnswer(ref str, 2000);
+            if (str.Contains("ELM327 v1.5"))
                 return true;
             else
                 return false;
+        }
+
+        public bool init()
+        {
+            string answer = "";
+            link.send("ATSP3");
+            link.getAnswer(ref answer, 5000);
+            if (!answer.Contains("OK"))
+                return false;
+            link.send("ATE0");
+            link.getAnswer(ref answer, 5000);
+            if (!answer.Contains("OK"))
+                return false;
+            return true;
+        }
+
+        public void send(string str, ref TextBox txt)
+        {
+            link.send(str);
+            string answer = "";
+            link.getAnswer(ref answer, 5000);
+            txt.AppendText(answer + "\n");
+        }
+
+        public void getData(string str, ref TextBox txt)
+        {
+            string res = link.getData(str);
+            int rpm = 0;
+            try { rpm = Convert.ToInt32(res, 16); }
+            catch
+            {
+                
+            }
+            txt.AppendText(res + "\n");
+            txt.AppendText(rpm + "rpm \n");
         }
     }
 }

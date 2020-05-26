@@ -18,6 +18,35 @@ namespace FuelEconomy
             linkPort = port;
         }
 
+        public string getData(string request)
+        {
+            try
+            {
+                if (request.Length != 0)
+                {
+                    linkPort.WriteLine(request);
+                }
+            }
+            catch
+            {
+                return "";
+            }
+            string res = "";
+            getAnswer(ref res, 3000);
+            if (res.Length < 4)
+                return "";
+            res = res.Replace(" ", "");
+
+            request = request.Replace("01", "41");
+            request = request.Trim();
+
+            if (res.Contains(request))
+                res = res.Replace(request, "");
+            res = res.Replace(">", "");
+            res = res.Trim();
+            return res;
+        }
+
         public bool send(string str)
         {
             try
@@ -34,7 +63,7 @@ namespace FuelEconomy
             }
             return true;
         }
-        internal void getAnswer(ref string str, int timeout = 1000)
+        public void getAnswer(ref string str, int timeout = 1000)
         {
             linkPort.ReadTimeout = timeout;
             timerFlag = true;
@@ -44,7 +73,10 @@ namespace FuelEconomy
             listenTimer.Start();
             while (timerFlag)
             {
-                str += linkPort.ReadExisting();
+                try {str += linkPort.ReadExisting();}
+                catch { break; }
+                if (str.Contains(">"))
+                    break;
             }
             listenTimer.Stop();
         }

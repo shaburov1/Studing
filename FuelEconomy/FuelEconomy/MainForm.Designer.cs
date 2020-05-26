@@ -30,21 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint9 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
-            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint10 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.BluetoothSerial = new System.IO.Ports.SerialPort(this.components);
             this.txt_to_send = new System.Windows.Forms.TextBox();
-            txt_log = new System.Windows.Forms.TextBox();
+            this.txt_log = new System.Windows.Forms.TextBox();
             this.connectButton = new System.Windows.Forms.Button();
             this.btn_clear = new System.Windows.Forms.Button();
             this.btn_rcv = new System.Windows.Forms.Button();
@@ -65,6 +54,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cbPorts = new System.Windows.Forms.ComboBox();
             this.infoPage = new System.Windows.Forms.TabPage();
+            this.startchart = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.mainScreen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartDashboard)).BeginInit();
@@ -80,13 +70,13 @@
             // 
             // txt_log
             // 
-            txt_log.Location = new System.Drawing.Point(332, 453);
-            txt_log.Multiline = true;
-            txt_log.Name = "txt_log";
-            txt_log.ReadOnly = true;
-            txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            txt_log.Size = new System.Drawing.Size(310, 93);
-            txt_log.TabIndex = 2;
+            this.txt_log.Location = new System.Drawing.Point(332, 453);
+            this.txt_log.Multiline = true;
+            this.txt_log.Name = "txt_log";
+            this.txt_log.ReadOnly = true;
+            this.txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txt_log.Size = new System.Drawing.Size(310, 93);
+            this.txt_log.TabIndex = 2;
             // 
             // connectButton
             // 
@@ -143,6 +133,7 @@
             // mainScreen
             // 
             this.mainScreen.BackColor = System.Drawing.Color.Transparent;
+            this.mainScreen.Controls.Add(this.startchart);
             this.mainScreen.Controls.Add(this.chartDashboard);
             this.mainScreen.Controls.Add(this.digitDashboardExtension);
             this.mainScreen.Controls.Add(this.digitDashboard);
@@ -153,7 +144,7 @@
             this.mainScreen.Controls.Add(this.connectButton);
             this.mainScreen.Controls.Add(this.btn_clear);
             this.mainScreen.Controls.Add(this.btn_rcv);
-            this.mainScreen.Controls.Add(txt_log);
+            this.mainScreen.Controls.Add(this.txt_log);
             this.mainScreen.Controls.Add(this.txt_to_send);
             this.mainScreen.Location = new System.Drawing.Point(130, 4);
             this.mainScreen.Name = "mainScreen";
@@ -207,41 +198,6 @@
             this.chartDashboard.Location = new System.Drawing.Point(26, 291);
             this.chartDashboard.Name = "chartDashboard";
             this.chartDashboard.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
-            series1.BackImageTransparentColor = System.Drawing.Color.Transparent;
-            series1.BackSecondaryColor = System.Drawing.Color.Transparent;
-            series1.BorderColor = System.Drawing.Color.Transparent;
-            series1.ChartArea = "ChartArea1";
-            series1.Color = System.Drawing.Color.CornflowerBlue;
-            series1.CustomProperties = "PointWidth=0.6";
-            series1.EmptyPointStyle.Color = System.Drawing.Color.Transparent;
-            series1.EmptyPointStyle.LabelBackColor = System.Drawing.Color.Transparent;
-            series1.EmptyPointStyle.LabelBorderColor = System.Drawing.Color.Transparent;
-            series1.EmptyPointStyle.LabelBorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-            series1.EmptyPointStyle.MarkerBorderColor = System.Drawing.Color.Transparent;
-            series1.EmptyPointStyle.MarkerColor = System.Drawing.Color.Transparent;
-            series1.EmptyPointStyle.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Square;
-            series1.IsValueShownAsLabel = true;
-            series1.LabelBackColor = System.Drawing.Color.Transparent;
-            series1.LabelBorderColor = System.Drawing.Color.Transparent;
-            series1.Legend = "Legend1";
-            series1.MarkerBorderColor = System.Drawing.Color.Transparent;
-            series1.MarkerColor = System.Drawing.Color.Transparent;
-            series1.MarkerImageTransparentColor = System.Drawing.Color.Transparent;
-            series1.MarkerSize = 3;
-            series1.Name = "chartData";
-            series1.Points.Add(dataPoint1);
-            series1.Points.Add(dataPoint2);
-            series1.Points.Add(dataPoint3);
-            series1.Points.Add(dataPoint4);
-            series1.Points.Add(dataPoint5);
-            series1.Points.Add(dataPoint6);
-            series1.Points.Add(dataPoint7);
-            series1.Points.Add(dataPoint8);
-            series1.Points.Add(dataPoint9);
-            series1.Points.Add(dataPoint10);
-            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt32;
-            series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
-            this.chartDashboard.Series.Add(series1);
             this.chartDashboard.Size = new System.Drawing.Size(512, 138);
             this.chartDashboard.TabIndex = 16;
             // 
@@ -393,6 +349,16 @@
             this.infoPage.TabIndex = 2;
             this.infoPage.Text = "Инфо";
             // 
+            // startchart
+            // 
+            this.startchart.Location = new System.Drawing.Point(463, 72);
+            this.startchart.Name = "startchart";
+            this.startchart.Size = new System.Drawing.Size(75, 23);
+            this.startchart.TabIndex = 17;
+            this.startchart.Text = "startchart";
+            this.startchart.UseVisualStyleBackColor = true;
+            this.startchart.Click += new System.EventHandler(this.startchart_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -416,7 +382,6 @@
         }
 
         #endregion
-
         private System.IO.Ports.SerialPort BluetoothSerial;
         private System.Windows.Forms.TextBox txt_to_send;
         private System.Windows.Forms.TextBox txt_log;
@@ -440,6 +405,7 @@
         private System.Windows.Forms.Label digitDashboardExtension;
         private System.Windows.Forms.Label digitDashboard;
         private System.Windows.Forms.Button buttonDefaultSettings;
+        private System.Windows.Forms.Button startchart;
     }
 }
 

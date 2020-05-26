@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace FuelEconomy
 {
@@ -13,13 +14,16 @@ namespace FuelEconomy
         private MySettings mySettings;
         private StatusBar statusBar;
         private RemoteDevice remoteScanner;
+        private ChartDashboard chartDash;
         public MainForm()
         {
             InitializeComponent();
             getCOMports();
             mySettings = new MySettings(ref connectButton, ref cbPorts, ref inputInjectorPerformance);
             statusBar = new StatusBar(ref statusImageLabel, ref statusTextLabel);
+            chartDash = new ChartDashboard(ref chartDashboard);
             tabControl.DrawItem += new DrawItemEventHandler(tabControl_DrawItem);
+            MainForm.CheckForIllegalCrossThreadCalls = false;
         }
 
         /**
@@ -102,6 +106,8 @@ namespace FuelEconomy
         {
             remoteScanner = new RemoteDevice(ref BluetoothSerial, ref statusBar);
             remoteScanner.connect(mySettings.SelectedPort);
+            if (remoteScanner.init())
+                txt_log.AppendText("ljahalkodf");
         }
         static public List<string> getCOMports()
         {
@@ -122,26 +128,8 @@ namespace FuelEconomy
             if (txt_to_send.TextLength != 0)
             {
                 str = txt_to_send.Text + "\r";
-                BluetoothSerial.WriteLine(str);
+                remoteScanner.getData(str, ref txt_log);
             }
-            txt_log.Text += "Отправлено: " + str.Length + " байт" + "\r\n";
-            txt_log.Text += txt_to_send.Text;
-            txt_log.AppendText("\r\n");
-
-            Thread listenPort = new Thread(listenCOMPort);
-            listenPort.Start();
-            //Thread.Sleep(500);
-            //byte[] buff = new byte[256];
-            //int rcvMsgCount = BluetoothSerial.Read(buff, 0, BluetoothSerial.BytesToRead);
-            //str = "Получено: " + rcvMsgCount + " байт";
-            //str += "\r\n";
-            //for (int i = 0; i < rcvMsgCount; ++i)
-            //{
-            //    str += (char)buff[i];
-            //    if ((char)buff[i] == 0x0D)
-            //        str += "\n";
-            //}
-            //txt_log.AppendText(str + "\r\n");
         }
 
         private void btn_clear_Click(object sender, EventArgs e)
@@ -151,9 +139,10 @@ namespace FuelEconomy
 
         private void btn_rcv_Click(object sender, EventArgs e)
         {
-            string s = "";
-            rcvMsg(ref s);
-            txt_log.AppendText(s);
+            //string s = "";
+            //rcvMsg(ref s);
+            //txt_log.AppendText(s);
+            chartDash.addNextparam(0.8);
         }
         private void rcvMsg(ref string S)
         {
@@ -197,6 +186,9 @@ namespace FuelEconomy
             }
         }
 
-
+        private void startchart_Click(object sender, EventArgs e)
+        {
+            chartDash.startChart();
+        }
     }
 }

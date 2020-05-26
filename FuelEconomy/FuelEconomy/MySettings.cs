@@ -16,7 +16,7 @@ namespace FuelEconomy
         {
             connectButton = connBut;
             cbPorts = cb;
-            injPerformanceTextBox = tb;
+            injPerformanceTextBox = tb;           
         }
         public string SelectedPort
         {
@@ -30,7 +30,10 @@ namespace FuelEconomy
                 if (selectedPort != null)
                     connectButton.Enabled = true;
                 else
+                {
+                    cbPorts.Text = "Не выбрано";
                     connectButton.Enabled = false;
+                }
                 saveSettings();
             }
         }
@@ -50,14 +53,16 @@ namespace FuelEconomy
 
         public void loadSettings()
         {
+            injectorPerformance = Properties.Settings.Default.injectorPerformance;
+
             List<string> ports = MainForm.getCOMports();
             if (ports.Contains(Properties.Settings.Default.linkPort))
                 SelectedPort = Properties.Settings.Default.linkPort;
             else
                 SelectedPort = null;
-            InjectorPerformance = Properties.Settings.Default.injectorPerformance;
-
-            cbPorts.SelectedItem = SelectedPort;
+            
+            cbPorts.Text = SelectedPort == null ? "Не выбрано" : SelectedPort;
+            cbPorts.SelectedItem = SelectedPort == null ? "Не выбрано" : SelectedPort;
             injPerformanceTextBox.Text = InjectorPerformance.ToString();
         }
 
