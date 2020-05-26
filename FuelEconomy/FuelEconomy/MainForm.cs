@@ -14,14 +14,14 @@ namespace FuelEconomy
         private MySettings mySettings;
         private StatusBar statusBar;
         private RemoteDevice remoteScanner;
-        private ChartDashboard chartDash;
+        private Dashboard dashboard;
         public MainForm()
         {
             InitializeComponent();
             getCOMports();
             mySettings = new MySettings(ref connectButton, ref cbPorts, ref inputInjectorPerformance);
             statusBar = new StatusBar(ref statusImageLabel, ref statusTextLabel);
-            chartDash = new ChartDashboard(ref chartDashboard);
+            dashboard = new Dashboard(ref chartDashboard, ref digitDashboard);
             tabControl.DrawItem += new DrawItemEventHandler(tabControl_DrawItem);
             MainForm.CheckForIllegalCrossThreadCalls = false;
         }
@@ -142,34 +142,8 @@ namespace FuelEconomy
             //string s = "";
             //rcvMsg(ref s);
             //txt_log.AppendText(s);
-            chartDash.addNextparam(0.8);
-        }
-        private void rcvMsg(ref string S)
-        {
-            if (BluetoothSerial.BytesToRead != 0)
-            {
-                string s = "";
-                while (BluetoothSerial.BytesToRead != 0)
-                {
-                    char c = (char)BluetoothSerial.ReadByte();
-                    if (s.Length != 0 && s.Last<char>() == 0x0D && c == 0x0D)
-                        s += "\n";
-                    s += c;
-                }
-                S += (s + "\r\n");
-            }
-        }
-
-        private void listenCOMPort()
-        {
-            string s = "";
-
-            for (int i = 0; i < 30; i++)
-            {
-                rcvMsg(ref s);
-                Thread.Sleep(100);
-            }
-            //txt_log.AppendText(s);
+            Random rnd = new Random();
+            dashboard.addNextparam(rnd.NextDouble() * 2);
         }
 
         private void disconnectButton_Click(object sender, EventArgs e)
@@ -188,7 +162,7 @@ namespace FuelEconomy
 
         private void startchart_Click(object sender, EventArgs e)
         {
-            chartDash.startChart();
+            dashboard.startChart();
         }
     }
 }
