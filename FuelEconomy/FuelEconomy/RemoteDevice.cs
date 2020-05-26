@@ -20,6 +20,7 @@ namespace FuelEconomy
             byMAP,
             byInjectorTiming
         }
+
         private RequestType requestType = RequestType.byPID;
         private double FuelRate
         {
@@ -80,7 +81,7 @@ namespace FuelEconomy
             string fuelRateStr = link.getData("015E");
             double fuelRate = 0;
             try { fuelRate = Convert.ToInt32(fuelRateStr, 16) * 0.05; }
-            catch {}
+            catch { }
             if (fuelRate == 0)
                 errorCount++;
             else
@@ -88,7 +89,7 @@ namespace FuelEconomy
                 FuelRate = fuelRate;
                 errorCount = 0;
             }
-            if(errorCount > 5)
+            if (errorCount > 5)
             {
                 FuelRate = 0;
                 errorCount = 0;
@@ -161,7 +162,7 @@ namespace FuelEconomy
         }
         private void caseInjectorTiming()
         {
-            if(mySettings.InjectorPerformance == 0)
+            if (mySettings.InjectorPerformance == 0)
             {
                 FuelRate = 0;
                 errorCount = 0;
@@ -172,7 +173,7 @@ namespace FuelEconomy
             string injTimingStr = link.getData("A029");
             injTimingStr = injTimingStr.Replace("E0", "");
             double injTime = 0;
-            try { injTime = Convert.ToInt32(injTimingStr, 16) /1000.0; }
+            try { injTime = Convert.ToInt32(injTimingStr, 16) / 1000.0; }
             catch { }
 
             string strRPM = link.getData("010C");
@@ -230,7 +231,7 @@ namespace FuelEconomy
         {
             bool res = true;
             string answer = "";
-            link.send("ATSP0");
+            link.send("ATSP3");
             link.getAnswer(ref answer, 5000);
             if (!answer.Contains("OK"))
                 res = false;

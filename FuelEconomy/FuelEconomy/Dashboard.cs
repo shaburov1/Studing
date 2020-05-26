@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -12,7 +11,7 @@ namespace FuelEconomy
         private Label digitDashboard = null;
         double fuelRate;
         private bool isAllowed = false;
-        private double FuelRate 
+        private double FuelRate
         {
             get
             {
@@ -23,7 +22,7 @@ namespace FuelEconomy
                 value = Math.Round(value, 1);
                 fuelRate = value;
                 string str = value.ToString();
-                digitDashboard.Text = str.Contains(",") ? str : str + ",0";
+                digitDashboard.Invoke(new Action<string>(digitDBappendText), str.Contains(",") ? str : str + ",0");
                 Thread.Sleep(100);
             }
         }
@@ -64,21 +63,6 @@ namespace FuelEconomy
             tm.Elapsed += Timer_Elapsed;
         }
 
-        public void addNextparam(double param)
-        {
-            FuelRate = param;
-        }
-
-        public void startChartWork()
-        {
-            isAllowed = true;
-        }
-
-        public void stopChartWork()
-        {
-            isAllowed = false;
-        }
-
         private void chartWork()
         {
             double previousFuelRateValue = 0;
@@ -103,16 +87,21 @@ namespace FuelEconomy
                             previousFuelRateValue = FuelRate;
                         }
                         s.Points[0].YValues[0] = average;
-
-                        chartDashboard.Series.Remove(s);
-                        chartDashboard.Series.Insert(0, s);
+                        ////chartDashboard.Series.Remove(s);
+                        //chartDashboard.Invoke(new Action<Series>(remove), s);
+                        ////chartDashboard.Series.Insert(0, s);
+                        //chartDashboard.Invoke(new Action<Series>(insert), s);
+                        chartDashboard.Invoke(new Action(update));
+                        chartDashboard.Invoke(new Action(recalculateAxes));
                         Thread.Sleep(100);
                     }
                     rollChart(average);
-                    chartDashboard.ChartAreas[0].RecalculateAxesScale();
+                    //chartDashboard.ChartAreas[0].RecalculateAxesScale();
+                    chartDashboard.Invoke(new Action(recalculateAxes));
 
                     s.Points[0].YValues[0] = 0;
-                    chartDashboard.Update();
+                    //chartDashboard.Update();
+                    chartDashboard.Invoke(new Action(update));
 
                     previousFuelRateValue = 0;
                     summ = 0;
@@ -124,19 +113,58 @@ namespace FuelEconomy
                 }
             }
         }
+        private void remove(Series s)
+        {
+            chartDashboard.Series.Remove(s);
+        }
+        private void insert(Series s)
+        {
+            chartDashboard.Series.Insert(0, s);
+        }
+
+        private void recalculateAxes()
+        {
+            chartDashboard.ChartAreas[0].RecalculateAxesScale();
+        }
+
+        private void update()
+        {
+            chartDashboard.Update();
+        }
+
+        private void digitDBappendText(string str)
+        {
+            digitDashboard.Text = str;
+        }
 
         private void rollChart(double param)
         {
             for (int i = 9; i > 0; i--)
                 s.Points[i].YValues[0] = s.Points[i - 1].YValues[0];
             s.Points[0].YValues[0] = param;
-            chartDashboard.Series.Remove(s);
-            chartDashboard.Series.Insert(0, s);
+            chartDashboard.Invoke(new Action(update));
+            //chartDashboard.Invoke(new Action<Series>(remove), s);
+            //chartDashboard.Invoke(new Action<Series>(insert), s);
         }
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             isTimeElapsed = true;
+        }
+
+        public void addNextparam(double param)
+        {
+            FuelRate = param;
+        }
+
+        public void startChartWork()
+        {
+            isAllowed = true;
+        }
+
+        public void stopChartWork()
+        {
+            isAllowed = false;
         }
     }
 }

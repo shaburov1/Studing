@@ -22,7 +22,7 @@ namespace FuelEconomy
             statusBar = new StatusBar(ref statusImageLabel, ref statusTextLabel);
             dashboard = new Dashboard(ref chartDashboard, ref digitDashboard);
             tabControl.DrawItem += new DrawItemEventHandler(tabControl_DrawItem);
-            MainForm.CheckForIllegalCrossThreadCalls = false;
+            MainForm.CheckForIllegalCrossThreadCalls = true;
         }
 
         /**

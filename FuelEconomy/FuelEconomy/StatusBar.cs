@@ -18,7 +18,6 @@ namespace FuelEconomy
             textBar = txtLabel;
         }
         
-
         public void setStatus(string inputStatus)
         {
             Status = "Статус: " + inputStatus;
