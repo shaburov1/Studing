@@ -35,6 +35,8 @@
             this.connectButton = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.mainScreen = new System.Windows.Forms.TabPage();
+            this.label7 = new System.Windows.Forms.Label();
+            this.rpmDashboard = new System.Windows.Forms.Label();
             this.chartDashboard = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.digitDashboardExtension = new System.Windows.Forms.Label();
             this.digitDashboard = new System.Windows.Forms.Label();
@@ -49,8 +51,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cbPorts = new System.Windows.Forms.ComboBox();
             this.infoPage = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.mainScreen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartDashboard)).BeginInit();
@@ -91,6 +93,8 @@
             // mainScreen
             // 
             this.mainScreen.BackColor = System.Drawing.Color.Transparent;
+            this.mainScreen.Controls.Add(this.label7);
+            this.mainScreen.Controls.Add(this.rpmDashboard);
             this.mainScreen.Controls.Add(this.chartDashboard);
             this.mainScreen.Controls.Add(this.digitDashboardExtension);
             this.mainScreen.Controls.Add(this.digitDashboard);
@@ -105,6 +109,28 @@
             this.mainScreen.TabIndex = 0;
             this.mainScreen.Tag = "";
             this.mainScreen.Text = "Устройство";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Palatino Linotype", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(400, 106);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(58, 32);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "rpm";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            // 
+            // rpmDashboard
+            // 
+            this.rpmDashboard.AutoSize = true;
+            this.rpmDashboard.Font = new System.Drawing.Font("Old English Text MT", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rpmDashboard.Location = new System.Drawing.Point(377, 138);
+            this.rpmDashboard.Name = "rpmDashboard";
+            this.rpmDashboard.Size = new System.Drawing.Size(81, 38);
+            this.rpmDashboard.TabIndex = 17;
+            this.rpmDashboard.Text = "0000";
+            this.rpmDashboard.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
             // chartDashboard
             // 
@@ -156,10 +182,10 @@
             // digitDashboardExtension
             // 
             this.digitDashboardExtension.AutoSize = true;
-            this.digitDashboardExtension.Font = new System.Drawing.Font("Old English Text MT", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.digitDashboardExtension.Font = new System.Drawing.Font("Palatino Linotype", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.digitDashboardExtension.Location = new System.Drawing.Point(374, 215);
             this.digitDashboardExtension.Name = "digitDashboardExtension";
-            this.digitDashboardExtension.Size = new System.Drawing.Size(88, 57);
+            this.digitDashboardExtension.Size = new System.Drawing.Size(85, 64);
             this.digitDashboardExtension.TabIndex = 15;
             this.digitDashboardExtension.Text = "l/h";
             // 
@@ -294,16 +320,6 @@
             this.infoPage.TabIndex = 2;
             this.infoPage.Text = "Инфо";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(122, 5);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(273, 25);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Инструкция пользователя";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -314,6 +330,16 @@
             this.label5.TabIndex = 1;
             this.label5.Text = "Для получения данных о мгновенном расходе топлива автомобиля необходимо:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(122, 5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(273, 25);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Инструкция пользователя";
             // 
             // MainForm
             // 
@@ -360,6 +386,8 @@
         private System.Windows.Forms.Button buttonDefaultSettings;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label rpmDashboard;
     }
 }
 

@@ -9,7 +9,9 @@ namespace FuelEconomy
     {
         private Chart chartDashboard = null;
         private Label digitDashboard = null;
-        double fuelRate;
+        private Label rpmDashboard = null;
+        private double fuelRate = 0;
+        private int rpm = 0;
         private bool isAllowed = false;
         private double FuelRate
         {
@@ -24,6 +26,19 @@ namespace FuelEconomy
                 string str = value.ToString();
                 digitDashboard.Invoke(new Action<string>(digitDBappendText), str.Contains(",") ? str : str + ",0");
                 Thread.Sleep(100);
+            }
+        }
+        private int RPM
+        {
+            get
+            {
+                return rpm;
+            }
+            set
+            {
+                rpm = value;
+                if (rpm > 0)
+                    rpmDashboard.Invoke(new Action<string>(rpmDBappendText), value.ToString());
             }
         }
         private System.Timers.Timer tm;
@@ -41,10 +56,11 @@ namespace FuelEconomy
         private DataPoint dp7 = new DataPoint(8, 0);
         private DataPoint dp8 = new DataPoint(9, 0);
         private DataPoint dp9 = new DataPoint(10, 0);
-        public Dashboard(ref Chart cdb, ref Label ddb)
+        public Dashboard(ref Chart cdb, ref Label ddb, ref Label rpm)
         {
             chartDashboard = cdb;
             digitDashboard = ddb;
+            rpmDashboard = rpm;
             s.IsValueShownAsLabel = true;
             s.Points.Add(dp0);
             s.Points.Add(dp1);
@@ -113,14 +129,6 @@ namespace FuelEconomy
                 }
             }
         }
-        private void remove(Series s)
-        {
-            chartDashboard.Series.Remove(s);
-        }
-        private void insert(Series s)
-        {
-            chartDashboard.Series.Insert(0, s);
-        }
 
         private void recalculateAxes()
         {
@@ -135,6 +143,10 @@ namespace FuelEconomy
         private void digitDBappendText(string str)
         {
             digitDashboard.Text = str;
+        }
+        private void rpmDBappendText(string str)
+        {
+            rpmDashboard.Text = str;
         }
 
         private void rollChart(double param)
@@ -165,6 +177,11 @@ namespace FuelEconomy
         public void stopChartWork()
         {
             isAllowed = false;
+        }
+
+        public void setRPM(int rpm)
+        {
+            RPM = rpm;
         }
     }
 }

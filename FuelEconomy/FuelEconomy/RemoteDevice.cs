@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Security.Cryptography;
 using System.Threading;
 
 namespace FuelEconomy
@@ -82,6 +83,16 @@ namespace FuelEconomy
             double fuelRate = 0;
             try { fuelRate = Convert.ToInt32(fuelRateStr, 16) * 0.05; }
             catch { }
+
+            //запросим обороты двигателя
+            int rpm = 0;
+            string strRPM = link.getData("010C");
+            try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
+            catch { }
+
+            if (rpm > 0)
+                dashboard.setRPM(rpm);
+
             if (fuelRate == 0)
                 errorCount++;
             else
@@ -144,6 +155,7 @@ namespace FuelEconomy
             }
             else
             {
+                dashboard.setRPM(rpm);
                 double IMAP = (double)rpm * (double)map / (double)iat;
                 double MAF = (IMAP / 120.0) * ((double)VE / 100.0) * ED * MM / R;
                 double FuelFlowGramsPerSecond = MAF / AirFuelRatio;
@@ -184,6 +196,7 @@ namespace FuelEconomy
                 errorCount++;
             else
             {
+                dashboard.setRPM(rpm);
                 FuelRate = (double)rpm * injTime * (double)mySettings.InjectorPerformance / 1000.0;
                 errorCount = 0;
             }
