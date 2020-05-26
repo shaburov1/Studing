@@ -21,6 +21,7 @@ namespace FuelEconomy
             mySettings = new MySettings(ref connectButton, ref cbPorts, ref inputInjectorPerformance);
             statusBar = new StatusBar(ref statusImageLabel, ref statusTextLabel);
             dashboard = new Dashboard(ref chartDashboard, ref digitDashboard, ref rpmDashboard);
+            remoteScaner = new RemoteDevice(ref adapterPort, ref statusBar, ref dashboard, ref mySettings);
             tabControl.DrawItem += new DrawItemEventHandler(tabControl_DrawItem);
             MainForm.CheckForIllegalCrossThreadCalls = true;
         }
@@ -104,7 +105,6 @@ namespace FuelEconomy
         private void connectButton_Click(object sender, EventArgs e)
         {
             statusBar.setStatus("Подключение.");
-            remoteScaner = new RemoteDevice(ref adapterPort, ref statusBar, ref dashboard, ref mySettings);
             if(!remoteScaner.connect(mySettings.SelectedPort))
                 return;
             if (!remoteScaner.init())

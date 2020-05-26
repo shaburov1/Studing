@@ -81,7 +81,6 @@ namespace FuelEconomy
 
         private void chartWork()
         {
-            double previousFuelRateValue = 0;
             double summ = 0;
             double average = 0;
             int averIterationCount = 0;
@@ -95,13 +94,10 @@ namespace FuelEconomy
                         if (!isAllowed)
                             break;
 
-                        if (FuelRate != previousFuelRateValue)
-                        {
-                            averIterationCount++;
-                            summ += FuelRate;
-                            average = Math.Round(summ / averIterationCount, 1);
-                            previousFuelRateValue = FuelRate;
-                        }
+                        averIterationCount++;
+                        summ += FuelRate;
+                        average = Math.Round(summ / averIterationCount, 1);
+                        
                         s.Points[0].YValues[0] = average;
                         ////chartDashboard.Series.Remove(s);
                         //chartDashboard.Invoke(new Action<Series>(remove), s);
@@ -119,7 +115,6 @@ namespace FuelEconomy
                     //chartDashboard.Update();
                     chartDashboard.Invoke(new Action(update));
 
-                    previousFuelRateValue = 0;
                     summ = 0;
                     average = 0;
                     averIterationCount = 0;

@@ -90,8 +90,7 @@ namespace FuelEconomy
             try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
             catch { }
 
-            if (rpm > 0)
-                dashboard.setRPM(rpm);
+            dashboard.setRPM(rpm);
 
             if (fuelRate == 0)
                 errorCount++;
@@ -102,6 +101,7 @@ namespace FuelEconomy
             }
             if (errorCount > 5)
             {
+                dashboard.setRPM(0);
                 FuelRate = 0;
                 errorCount = 0;
                 requestType = RequestType.byMAP;
@@ -149,13 +149,14 @@ namespace FuelEconomy
             try { iat = Convert.ToInt32(IAT, 16) + 273; }
             catch { }
 
+            dashboard.setRPM(rpm);
+
             if (rpm == 0 || map == 0 || iat == 0)
             {
                 errorCount++;
             }
             else
             {
-                dashboard.setRPM(rpm);
                 double IMAP = (double)rpm * (double)map / (double)iat;
                 double MAF = (IMAP / 120.0) * ((double)VE / 100.0) * ED * MM / R;
                 double FuelFlowGramsPerSecond = MAF / AirFuelRatio;
@@ -166,6 +167,7 @@ namespace FuelEconomy
 
             if (errorCount > 5)
             {
+                dashboard.setRPM(0);
                 FuelRate = 0;
                 errorCount = 0;
                 requestType = RequestType.byInjectorTiming;
@@ -192,17 +194,19 @@ namespace FuelEconomy
             try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
             catch { }
 
+            dashboard.setRPM(rpm);
+
             if (injTime == 0 || rpm == 0)
                 errorCount++;
             else
             {
-                dashboard.setRPM(rpm);
                 FuelRate = (double)rpm * injTime * (double)mySettings.InjectorPerformance / 1000.0;
                 errorCount = 0;
             }
 
             if (errorCount > 5)
             {
+                dashboard.setRPM(0);
                 FuelRate = 0;
                 errorCount = 0;
                 requestType = RequestType.byPID;
