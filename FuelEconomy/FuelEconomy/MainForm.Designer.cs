@@ -49,10 +49,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cbPorts = new System.Windows.Forms.ComboBox();
             this.infoPage = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.mainScreen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartDashboard)).BeginInit();
             this.settingsScreen.SuspendLayout();
+            this.infoPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // connectButton
@@ -283,11 +286,34 @@
             // 
             // infoPage
             // 
+            this.infoPage.Controls.Add(this.label5);
+            this.infoPage.Controls.Add(this.label4);
             this.infoPage.Location = new System.Drawing.Point(130, 4);
             this.infoPage.Name = "infoPage";
             this.infoPage.Size = new System.Drawing.Size(530, 552);
             this.infoPage.TabIndex = 2;
             this.infoPage.Text = "Инфо";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(122, 5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(273, 25);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Инструкция пользователя";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(3, 42);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(478, 15);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Для получения данных о мгновенном расходе топлива автомобиля необходимо:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -307,6 +333,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.chartDashboard)).EndInit();
             this.settingsScreen.ResumeLayout(false);
             this.settingsScreen.PerformLayout();
+            this.infoPage.ResumeLayout(false);
+            this.infoPage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -330,6 +358,8 @@
         private System.Windows.Forms.Label digitDashboardExtension;
         private System.Windows.Forms.Label digitDashboard;
         private System.Windows.Forms.Button buttonDefaultSettings;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
     }
 }
 

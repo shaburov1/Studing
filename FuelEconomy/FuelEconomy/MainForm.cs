@@ -120,7 +120,8 @@ namespace FuelEconomy
             {
                 statusBar.setStatus("Отключено");
                 dashboard.stopChartWork();
-                remoteScaner.stopWork();
+                if(remoteScaner != null)
+                    remoteScaner.stopWork();
             }
         }
         static public List<string> getCOMports()

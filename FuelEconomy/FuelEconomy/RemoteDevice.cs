@@ -115,7 +115,6 @@ namespace FuelEconomy
              *
              *  LPH = FuelFlowLitersPerSecond * 3600; // Convert to liters per hour
              */
-            Random rnd = new Random();
             const double R = 8.314;
             const double ED = 1.396;
             const double MM = 28.9644;
@@ -124,20 +123,20 @@ namespace FuelEconomy
             const int FuelDensityGramsPerLiter = 720;
 
             //запросим обороты двигателя
-            //string strRPM = link.getData("010C");
-            int rpm = 0; rpm = rnd.Next(730, 3000);
-            //try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
-            //catch { }
+            int rpm = 0;
+            string strRPM = link.getData("010C");
+            try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
+            catch { }
 
-            //string MAP = link.getData("010B");
-            int map = 0; map = rnd.Next(24, 30);
-            //try { map = Convert.ToInt32(MAP, 16); }
-            //catch { }
+            int map = 0;
+            string MAP = link.getData("010B");
+            try { map = Convert.ToInt32(MAP, 16); }
+            catch { }
 
-            //string IAT = link.getData("010F");
-            int iat = 0; iat = rnd.Next(80, 90);
-            //try { iat = Convert.ToInt32(IAT, 16) + 273; }
-            //catch { }
+            int iat = 0;
+            string IAT = link.getData("010F");
+            try { iat = Convert.ToInt32(IAT, 16) + 273; }
+            catch { }
 
             if (rpm == 0 || map == 0 || iat == 0)
             {
