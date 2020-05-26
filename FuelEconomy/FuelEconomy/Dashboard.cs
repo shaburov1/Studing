@@ -11,6 +11,7 @@ namespace FuelEconomy
         private Chart chartDashboard = null;
         private Label digitDashboard = null;
         double fuelRate;
+        private bool allowWork = false;
         private double FuelRate 
         {
             get
@@ -57,6 +58,7 @@ namespace FuelEconomy
             s.Points.Add(dp9);
             chartDashboard.Series.Add(s);
             averageValueThread = new Thread(chartWork);
+            averageValueThread.Start();
             tm = new System.Timers.Timer(6000);
             tm.Elapsed += Timer_Elapsed;
         }
@@ -68,12 +70,12 @@ namespace FuelEconomy
 
         public void startChart()
         {
-            averageValueThread.Start();
+            allowWork = true;
         }
 
         public void stopChart()
         {
-            averageValueThread.Abort();
+            allowWork = false;
         }
 
         private void chartWork()
@@ -84,32 +86,38 @@ namespace FuelEconomy
             int averIterationCount = 0;
             while (true)
             {
-                tm.Start();
-                while (!isTimeElapsed)
+                if (allowWork)
                 {
-                    if (FuelRate != previousFuelRateValue)
+                    tm.Start();
+                    while (!isTimeElapsed)
                     {
-                        averIterationCount++;
-                        summ += FuelRate;
-                        average = Math.Round(summ / averIterationCount, 1);
-                        previousFuelRateValue = FuelRate;
+                        if (!allowWork)
+                            break;
+
+                        if (FuelRate != previousFuelRateValue)
+                        {
+                            averIterationCount++;
+                            summ += FuelRate;
+                            average = Math.Round(summ / averIterationCount, 1);
+                            previousFuelRateValue = FuelRate;
+                        }
+                        s.Points[0].YValues[0] = average;
+                        chartDashboard.Series.Remove(s);
+                        chartDashboard.Series.Insert(0, s);
+                        chartDashboard.ChartAreas[0].RecalculateAxesScale();
+                        Thread.Sleep(100);
                     }
-                    s.Points[0].YValues[0] = average;
-                    chartDashboard.Series.Remove(s);
-                    chartDashboard.Series.Insert(0, s);
-                    chartDashboard.ChartAreas[0].RecalculateAxesScale();
-                    Thread.Sleep(100);
+                    rollChart(average);
+
+                    previousFuelRateValue = 0;
+                    FuelRate = 0;
+                    summ = 0;
+                    average = 0;
+                    averIterationCount = 0;
+
+                    isTimeElapsed = false;
+                    tm.Stop();
                 }
-                rollChart(average);
-
-                previousFuelRateValue = 0;
-                FuelRate = 0;
-                summ = 0;
-                average = 0;
-                averIterationCount = 0;
-
-                isTimeElapsed = false;
-                tm.Stop();
             }
         }
 

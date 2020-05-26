@@ -154,9 +154,7 @@ namespace FuelEconomy
             if (!BluetoothSerial.IsOpen)
             {
                 statusBar.setStatus("Отключено");
-                txt_log.Text += "Отключено от порта: ";
-                txt_log.Text += BluetoothSerial.PortName;
-                txt_log.AppendText("\r\n");
+                dashboard.stopChart();
             }
         }
 
