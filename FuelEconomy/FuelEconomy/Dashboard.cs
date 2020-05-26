@@ -97,6 +97,7 @@ namespace FuelEconomy
                     s.Points[0].YValues[0] = average;
                     chartDashboard.Series.Remove(s);
                     chartDashboard.Series.Insert(0, s);
+                    chartDashboard.ChartAreas[0].RecalculateAxesScale();
                     Thread.Sleep(100);
                 }
                 rollChart(average);

@@ -15,6 +15,7 @@ namespace FuelEconomy
         private StatusBar statusBar;
         private RemoteDevice remoteScanner;
         private Dashboard dashboard;
+        private double a = 0.0;
         public MainForm()
         {
             InitializeComponent();
@@ -142,8 +143,7 @@ namespace FuelEconomy
             //string s = "";
             //rcvMsg(ref s);
             //txt_log.AppendText(s);
-            Random rnd = new Random();
-            dashboard.addNextparam(rnd.NextDouble() * 2);
+            dashboard.addNextparam(a+=0.3);
         }
 
         private void disconnectButton_Click(object sender, EventArgs e)

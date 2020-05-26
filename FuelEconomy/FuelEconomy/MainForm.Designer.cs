@@ -39,6 +39,7 @@
             this.btn_rcv = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.mainScreen = new System.Windows.Forms.TabPage();
+            this.startchart = new System.Windows.Forms.Button();
             this.chartDashboard = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.digitDashboardExtension = new System.Windows.Forms.Label();
             this.digitDashboard = new System.Windows.Forms.Label();
@@ -54,7 +55,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cbPorts = new System.Windows.Forms.ComboBox();
             this.infoPage = new System.Windows.Forms.TabPage();
-            this.startchart = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.mainScreen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartDashboard)).BeginInit();
@@ -154,6 +154,16 @@
             this.mainScreen.Tag = "";
             this.mainScreen.Text = "Устройство";
             // 
+            // startchart
+            // 
+            this.startchart.Location = new System.Drawing.Point(463, 72);
+            this.startchart.Name = "startchart";
+            this.startchart.Size = new System.Drawing.Size(75, 23);
+            this.startchart.TabIndex = 17;
+            this.startchart.Text = "startchart";
+            this.startchart.UseVisualStyleBackColor = true;
+            this.startchart.Click += new System.EventHandler(this.startchart_Click);
+            // 
             // chartDashboard
             // 
             this.chartDashboard.BackColor = System.Drawing.Color.Transparent;
@@ -215,11 +225,12 @@
             // 
             this.digitDashboard.AutoSize = true;
             this.digitDashboard.Font = new System.Drawing.Font("Old English Text MT", 129.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.digitDashboard.Location = new System.Drawing.Point(57, 66);
+            this.digitDashboard.Location = new System.Drawing.Point(40, 66);
             this.digitDashboard.Name = "digitDashboard";
             this.digitDashboard.Size = new System.Drawing.Size(311, 206);
             this.digitDashboard.TabIndex = 14;
             this.digitDashboard.Text = "0,0";
+            this.digitDashboard.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // statusImageLabel
             // 
@@ -348,16 +359,6 @@
             this.infoPage.Size = new System.Drawing.Size(650, 552);
             this.infoPage.TabIndex = 2;
             this.infoPage.Text = "Инфо";
-            // 
-            // startchart
-            // 
-            this.startchart.Location = new System.Drawing.Point(463, 72);
-            this.startchart.Name = "startchart";
-            this.startchart.Size = new System.Drawing.Size(75, 23);
-            this.startchart.TabIndex = 17;
-            this.startchart.Text = "startchart";
-            this.startchart.UseVisualStyleBackColor = true;
-            this.startchart.Click += new System.EventHandler(this.startchart_Click);
             // 
             // MainForm
             // 
