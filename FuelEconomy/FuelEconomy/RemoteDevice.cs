@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Security.Cryptography;
 using System.Threading;
 
 namespace FuelEconomy
@@ -79,6 +78,7 @@ namespace FuelEconomy
         }
         private void casePID()
         {
+            statusBar.setStatus("Подключено. Запрос данных напрямую из электронного блока управления");
             string fuelRateStr = link.getData("015E");
             double fuelRate = 0;
             try { fuelRate = Convert.ToInt32(fuelRateStr, 16) * 0.05; }
@@ -110,6 +110,7 @@ namespace FuelEconomy
         }
         private void caseMAP()
         {
+            statusBar.setStatus("Подключено. Рассчет через показания датчика Manifold Air Pressure");
             /*  IAT - Intake Air Temperature in Kelvin - 283
              *  R - Specific Gas Constant (8.314472 J/(mol.K)
              *  MM - Average molecular mass of air (28.9644 g/mol)
@@ -177,11 +178,15 @@ namespace FuelEconomy
         {
             if (mySettings.InjectorPerformance == 0)
             {
+                statusBar.setStatus("Подключено. Информация о производительности форсунок отсутствует.");
+                Thread.Sleep(3000);
                 FuelRate = 0;
                 errorCount = 0;
                 requestType = RequestType.byPID;
                 return;
             }
+
+            statusBar.setStatus("Подключено. Рассчет через показания датчика времени открытия форсунок");
 
             string injTimingStr = link.getData("A029");
             injTimingStr = injTimingStr.Replace("E0", "");
@@ -234,10 +239,7 @@ namespace FuelEconomy
             if (port.IsOpen)
             {
                 if (verifyConnection())
-                {
-                    statusBar.setStatus($"Подключено к порту {port.PortName}");
                     return true;
-                }
                 else
                     statusBar.setStatus("Ошибка, устройство не прошло проверку. Неизвестное устройство");
             }

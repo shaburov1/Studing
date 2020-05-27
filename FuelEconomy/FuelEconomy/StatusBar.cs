@@ -1,15 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FuelEconomy
 {
     class StatusBar
     {
-        private string Status { get; set; }
+        private string status;
+        private string Status
+        {
+            get
+            {
+                return status;
+            }
+            set
+            {
+                status = "Статус: " + value;
+                if (status.Contains("Статус: Подключено"))
+                    imageBar.Image = global::FuelEconomy.Properties.Resources.Connected;
+                else
+                    imageBar.Image = global::FuelEconomy.Properties.Resources.Disconnected;
+            }
+
+        }
         private Label imageBar;
         private Label textBar;
         public StatusBar(ref Label imgLabel, ref Label txtLabel)
@@ -17,15 +29,16 @@ namespace FuelEconomy
             imageBar = imgLabel;
             textBar = txtLabel;
         }
-        
-        public void setStatus(string inputStatus)
+
+        public void setStatusDirectly(string inputStatus)
         {
-            Status = "Статус: " + inputStatus;
+            Status = inputStatus;
             textBar.Text = Status;
-            if (Status.Contains("Статус: Подключено"))
-                imageBar.Image = global::FuelEconomy.Properties.Resources.Connected;
-            else
-                imageBar.Image = global::FuelEconomy.Properties.Resources.Disconnected;
+        }
+
+        public void setStatus(string s)
+        {
+            textBar.Invoke(new Action<String>(setStatusDirectly), s);
         }
     }
 }
