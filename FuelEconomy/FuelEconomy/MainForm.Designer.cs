@@ -287,7 +287,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(250, 25);
             this.label2.TabIndex = 8;
-            this.label2.Text = "Рассчетная производительность форсунок";
+            this.label2.Text = "Расчётная производительность форсунок";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label1
@@ -352,7 +352,6 @@
             this.MinimumSize = new System.Drawing.Size(680, 600);
             this.Name = "MainForm";
             this.Text = "Fuel Economy";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl.ResumeLayout(false);
             this.mainScreen.ResumeLayout(false);

@@ -5,7 +5,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace FuelEconomy
 {
-    class Dashboard : IDisposable
+    class Dashboard
     {
         private Chart chartDashboard = null;
         private Label digitDashboard = null;
@@ -25,7 +25,6 @@ namespace FuelEconomy
                 fuelRate = value;
                 string str = value.ToString();
                 digitDashboard.Invoke(new Action<string>(digitDBappendText), str.Contains(",") ? str : str + ",0");
-                Thread.Sleep(100);
             }
         }
         private int RPM
@@ -73,8 +72,6 @@ namespace FuelEconomy
             s.Points.Add(dp8);
             s.Points.Add(dp9);
             chartDashboard.Series.Add(s);
-            averageValueThread = new Thread(chartWork);
-            averageValueThread.Start();
             tm = new System.Timers.Timer(6000);
             tm.Elapsed += Timer_Elapsed;
         }
@@ -84,44 +81,41 @@ namespace FuelEconomy
             double summ = 0;
             double average = 0;
             int averIterationCount = 0;
-            while (true)
+            while (isAllowed)
             {
-                if (isAllowed)
+                tm.Start();
+                while (!isTimeElapsed)
                 {
-                    tm.Start();
-                    while (!isTimeElapsed)
-                    {
-                        if (!isAllowed)
-                            break;
+                    if (!isAllowed)
+                        break;
 
-                        averIterationCount++;
-                        summ += FuelRate;
-                        average = Math.Round(summ / averIterationCount, 1);
+                    averIterationCount++;
+                    summ += FuelRate;
+                    average = Math.Round(summ / averIterationCount, 1);
 
-                        s.Points[0].YValues[0] = average;
-                        ////chartDashboard.Series.Remove(s);
-                        //chartDashboard.Invoke(new Action<Series>(remove), s);
-                        ////chartDashboard.Series.Insert(0, s);
-                        //chartDashboard.Invoke(new Action<Series>(insert), s);
-                        chartDashboard.Invoke(new Action(update));
-                        chartDashboard.Invoke(new Action(recalculateAxes));
-                        Thread.Sleep(100);
-                    }
-                    rollChart(average);
-                    //chartDashboard.ChartAreas[0].RecalculateAxesScale();
-                    chartDashboard.Invoke(new Action(recalculateAxes));
-
-                    s.Points[0].YValues[0] = 0;
-                    //chartDashboard.Update();
+                    s.Points[0].YValues[0] = average;
+                    ////chartDashboard.Series.Remove(s);
+                    //chartDashboard.Invoke(new Action<Series>(remove), s);
+                    ////chartDashboard.Series.Insert(0, s);
+                    //chartDashboard.Invoke(new Action<Series>(insert), s);
                     chartDashboard.Invoke(new Action(update));
-
-                    summ = 0;
-                    average = 0;
-                    averIterationCount = 0;
-
-                    isTimeElapsed = false;
-                    tm.Stop();
+                    chartDashboard.Invoke(new Action(recalculateAxes));
+                    Thread.Sleep(100);
                 }
+                rollChart(average);
+                //chartDashboard.ChartAreas[0].RecalculateAxesScale();
+                chartDashboard.Invoke(new Action(recalculateAxes));
+
+                s.Points[0].YValues[0] = 0;
+                //chartDashboard.Update();
+                chartDashboard.Invoke(new Action(update));
+
+                summ = 0;
+                average = 0;
+                averIterationCount = 0;
+
+                isTimeElapsed = false;
+                tm.Stop();
                 Thread.Sleep(10);
             }
         }
@@ -160,14 +154,18 @@ namespace FuelEconomy
             isTimeElapsed = true;
         }
 
-        public void addNextparam(double param)
+        public void setFuelRate(double param)
         {
             FuelRate = param;
         }
 
         public void startChartWork()
         {
+            if (averageValueThread != null)
+                averageValueThread.Abort();
+            averageValueThread = new Thread(chartWork);
             isAllowed = true;
+            averageValueThread.Start();
         }
 
         public void stopChartWork()
@@ -178,20 +176,6 @@ namespace FuelEconomy
         public void setRPM(int rpm)
         {
             RPM = rpm;
-        }
-
-        public void Dispose()
-        {
-            chartDashboard = null;
-            digitDashboard = null;
-            rpmDashboard = null;
-            fuelRate = 0;
-            rpm = 0;
-            isAllowed = false;
-
-            if (averageValueThread != null)
-                if (averageValueThread.IsAlive)
-                    averageValueThread.Abort();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace FuelEconomy
 {
-    class RemoteDevice : IDisposable
+    class RemoteDevice
     {
         private MyLinkHandler link = null;
         private SerialPort port = null;
@@ -32,7 +32,7 @@ namespace FuelEconomy
             set
             {
                 fuelRate = value;
-                dashboard.addNextparam(fuelRate);
+                dashboard.setFuelRate(fuelRate);
             }
         }
         public RemoteDevice(ref SerialPort sp, ref StatusBar sb, ref Dashboard db, ref MySettings ms)
@@ -46,8 +46,6 @@ namespace FuelEconomy
             port.ReadTimeout = 6000;
             port.NewLine = "\n";
 
-            work = new Thread(getData);
-            work.Start();
             link = new MyLinkHandler(ref sp);
         }
         private bool verifyConnection()
@@ -63,16 +61,13 @@ namespace FuelEconomy
         }
         private void getData()
         {
-            while (true)
+            while (allowWork)
             {
-                if (allowWork)
+                switch (requestType)
                 {
-                    switch (requestType)
-                    {
-                        case RequestType.byPID: casePID(); break;
-                        case RequestType.byMAP: caseMAP(); break;
-                        case RequestType.byInjectorTiming: caseInjectorTiming(); break;
-                    }
+                    case RequestType.byPID: casePID(); break;
+                    case RequestType.byMAP: caseMAP(); break;
+                    case RequestType.byInjectorTiming: caseInjectorTiming(); break;
                 }
                 Thread.Sleep(200);
             }
@@ -266,29 +261,17 @@ namespace FuelEconomy
         }
         public void startWork()
         {
+            if (work != null)
+                work.Abort();
+            work = new Thread(getData);
             allowWork = true;
+            work.Start();
         }
         public void stopWork()
         {
             allowWork = false;
             FuelRate = 0;
-        }
-
-        public void Dispose()
-        {
-            link = null;
-            port = null;
-            statusBar = null;
-            dashboard = null;
-            mySettings = null;
-            allowWork = false;
-            fuelRate = 0;
-            errorCount = 0;
-
-            if (work != null)
-                if (work.IsAlive)
-                    work.Abort();
-
+            dashboard.setRPM(0);
         }
     }
 }
