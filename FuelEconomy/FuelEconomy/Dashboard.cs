@@ -5,7 +5,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace FuelEconomy
 {
-    class Dashboard
+    class Dashboard : IDisposable
     {
         private Chart chartDashboard = null;
         private Label digitDashboard = null;
@@ -43,7 +43,7 @@ namespace FuelEconomy
         }
         private System.Timers.Timer tm;
         private bool isTimeElapsed = false;
-        Thread averageValueThread = null;
+        private Thread averageValueThread = null;
 
         private Series s = new Series();
         private DataPoint dp0 = new DataPoint(1, 0);
@@ -97,7 +97,7 @@ namespace FuelEconomy
                         averIterationCount++;
                         summ += FuelRate;
                         average = Math.Round(summ / averIterationCount, 1);
-                        
+
                         s.Points[0].YValues[0] = average;
                         ////chartDashboard.Series.Remove(s);
                         //chartDashboard.Invoke(new Action<Series>(remove), s);
@@ -122,6 +122,7 @@ namespace FuelEconomy
                     isTimeElapsed = false;
                     tm.Stop();
                 }
+                Thread.Sleep(10);
             }
         }
 
@@ -177,6 +178,20 @@ namespace FuelEconomy
         public void setRPM(int rpm)
         {
             RPM = rpm;
+        }
+
+        public void Dispose()
+        {
+            chartDashboard = null;
+            digitDashboard = null;
+            rpmDashboard = null;
+            fuelRate = 0;
+            rpm = 0;
+            isAllowed = false;
+
+            if (averageValueThread != null)
+                if (averageValueThread.IsAlive)
+                    averageValueThread.Abort();
         }
     }
 }

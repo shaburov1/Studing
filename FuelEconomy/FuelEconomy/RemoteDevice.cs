@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace FuelEconomy
 {
-    class RemoteDevice
+    class RemoteDevice : IDisposable
     {
         private MyLinkHandler link = null;
         private SerialPort port = null;
@@ -14,6 +14,7 @@ namespace FuelEconomy
         private bool allowWork = false;
         private double fuelRate = 0;
         private int errorCount = 0;
+        private Thread work = null;
         enum RequestType
         {
             byPID,
@@ -45,7 +46,7 @@ namespace FuelEconomy
             port.ReadTimeout = 6000;
             port.NewLine = "\n";
 
-            Thread work = new Thread(getData);
+            work = new Thread(getData);
             work.Start();
             link = new MyLinkHandler(ref sp);
         }
@@ -186,7 +187,7 @@ namespace FuelEconomy
                 return;
             }
 
-            statusBar.setStatus("Подключено. Рассчет через показания датчика времени открытия форсунок");
+            statusBar.setStatus("Подключено. Расчет через показания датчика времени открытия форсунок");
 
             string injTimingStr = link.getData("A029");
             injTimingStr = injTimingStr.Replace("E0", "");
@@ -271,6 +272,23 @@ namespace FuelEconomy
         {
             allowWork = false;
             FuelRate = 0;
+        }
+
+        public void Dispose()
+        {
+            link = null;
+            port = null;
+            statusBar = null;
+            dashboard = null;
+            mySettings = null;
+            allowWork = false;
+            fuelRate = 0;
+            errorCount = 0;
+
+            if (work != null)
+                if (work.IsAlive)
+                    work.Abort();
+
         }
     }
 }

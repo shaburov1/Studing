@@ -135,6 +135,10 @@ namespace FuelEconomy
             }
             return uniqPorts;
         }
-
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            dashboard.Dispose();
+            remoteScaner.Dispose();
+        }
     }
 }
