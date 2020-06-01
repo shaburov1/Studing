@@ -76,6 +76,9 @@ namespace FuelEconomy
             tm.Elapsed += Timer_Elapsed;
         }
 
+        /**
+         * основная работа по отрисовке графика 
+         */
         private void chartWork()
         {
             double summ = 0;
@@ -94,20 +97,13 @@ namespace FuelEconomy
                     average = Math.Round(summ / averIterationCount, 1);
 
                     s.Points[0].YValues[0] = average;
-                    ////chartDashboard.Series.Remove(s);
-                    //chartDashboard.Invoke(new Action<Series>(remove), s);
-                    ////chartDashboard.Series.Insert(0, s);
-                    //chartDashboard.Invoke(new Action<Series>(insert), s);
                     chartDashboard.Invoke(new Action(update));
                     chartDashboard.Invoke(new Action(recalculateAxes));
                     Thread.Sleep(100);
                 }
                 rollChart(average);
-                //chartDashboard.ChartAreas[0].RecalculateAxesScale();
-                chartDashboard.Invoke(new Action(recalculateAxes));
 
-                s.Points[0].YValues[0] = 0;
-                //chartDashboard.Update();
+                s.Points[0].YValues[0] = 0; //сбросим левый столбик графика
                 chartDashboard.Invoke(new Action(update));
 
                 summ = 0;
@@ -149,6 +145,9 @@ namespace FuelEconomy
             //chartDashboard.Invoke(new Action<Series>(insert), s);
         }
 
+        /**
+         * событие окончания таймера
+         */
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             isTimeElapsed = true;
@@ -159,6 +158,10 @@ namespace FuelEconomy
             FuelRate = param;
         }
 
+
+        /**
+         * запуск основной работы по отрисовке дашборда
+         */
         public void startChartWork()
         {
             if (averageValueThread != null)
@@ -168,6 +171,9 @@ namespace FuelEconomy
             averageValueThread.Start();
         }
 
+        /**
+         * остановка работы
+         */
         public void stopChartWork()
         {
             isAllowed = false;

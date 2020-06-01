@@ -30,7 +30,7 @@ namespace FuelEconomy
             textBar = txtLabel;
         }
 
-        public void setStatusDirectly(string inputStatus)
+        private void setStatusDirectly(string inputStatus)
         {
             Status = inputStatus;
             textBar.Text = Status;

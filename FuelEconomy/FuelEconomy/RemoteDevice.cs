@@ -15,11 +15,15 @@ namespace FuelEconomy
         private double fuelRate = 0;
         private int errorCount = 0;
         private Thread work = null;
+
+        /**
+         * структура методов расчета мгновенного расхода топлива
+         */
         enum RequestType
         {
             byPID,
-            byMAP,
-            byInjectorTiming
+            byInjectorTiming,
+            byMAP
         }
 
         private RequestType requestType = RequestType.byPID;
@@ -48,6 +52,10 @@ namespace FuelEconomy
 
             link = new MyLinkHandler(ref sp);
         }
+
+        /*
+         * проверка, то ли устройство находится на конце соединения
+         */
         private bool verifyConnection()
         {
             if (!link.send("atz"))
@@ -59,19 +67,28 @@ namespace FuelEconomy
             else
                 return false;
         }
-        private void getData()
+
+        /**
+         * непосредственная работа по получению данных и их обработку
+         */
+        private void mainWork()
         {
             while (allowWork)
             {
                 switch (requestType)
                 {
                     case RequestType.byPID: casePID(); break;
-                    case RequestType.byMAP: caseMAP(); break;
                     case RequestType.byInjectorTiming: caseInjectorTiming(); break;
+                    case RequestType.byMAP: caseMAP(); break;
+                    
                 }
                 Thread.Sleep(200);
             }
         }
+
+        /*
+         * получение данных напрямую из соответствующего PID протокола
+         */
         private void casePID()
         {
             statusBar.setStatus("Подключено. Запрос данных напрямую из электронного блока управления");
@@ -100,10 +117,61 @@ namespace FuelEconomy
                 dashboard.setRPM(0);
                 FuelRate = 0;
                 errorCount = 0;
-                requestType = RequestType.byMAP;
+                requestType = RequestType.byInjectorTiming;
                 return;
             }
         }
+
+        /**
+         * рассчет через время открытия форсунок и их производительность
+         */
+        private void caseInjectorTiming()
+        {
+            if (mySettings.InjectorPerformance == 0)
+            {
+                statusBar.setStatus("Подключено. Информация о производительности форсунок отсутствует.");
+                Thread.Sleep(3000);
+                FuelRate = 0;
+                errorCount = 0;
+                requestType = RequestType.byMAP;
+                return;
+            }
+
+            statusBar.setStatus("Подключено. Расчет через показания датчика времени открытия форсунок");
+
+            string injTimingStr = link.getData("A029");
+            injTimingStr = injTimingStr.Replace("E0", "");
+            double injTime = 0;
+            try { injTime = Convert.ToInt32(injTimingStr, 16) / 1000.0; }
+            catch { }
+
+            string strRPM = link.getData("010C");
+            int rpm = 0;
+            try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
+            catch { }
+
+            dashboard.setRPM(rpm);
+
+            if (injTime == 0 || rpm == 0)
+                errorCount++;
+            else
+            {
+                FuelRate = (double)rpm * injTime * (double)mySettings.InjectorPerformance / 1000.0;
+                errorCount = 0;
+            }
+
+            if (errorCount > 5)
+            {
+                dashboard.setRPM(0);
+                FuelRate = 0;
+                errorCount = 0;
+                requestType = RequestType.byMAP;
+            }
+        }
+
+        /**
+         * расход мгновенного расхода через давление воздуха во впускном коллекторе
+         */
         private void caseMAP()
         {
             statusBar.setStatus("Подключено. Рассчет через показания датчика Manifold Air Pressure");
@@ -167,52 +235,13 @@ namespace FuelEconomy
                 dashboard.setRPM(0);
                 FuelRate = 0;
                 errorCount = 0;
-                requestType = RequestType.byInjectorTiming;
-            }
-        }
-        private void caseInjectorTiming()
-        {
-            if (mySettings.InjectorPerformance == 0)
-            {
-                statusBar.setStatus("Подключено. Информация о производительности форсунок отсутствует.");
-                Thread.Sleep(3000);
-                FuelRate = 0;
-                errorCount = 0;
-                requestType = RequestType.byPID;
-                return;
-            }
-
-            statusBar.setStatus("Подключено. Расчет через показания датчика времени открытия форсунок");
-
-            string injTimingStr = link.getData("A029");
-            injTimingStr = injTimingStr.Replace("E0", "");
-            double injTime = 0;
-            try { injTime = Convert.ToInt32(injTimingStr, 16) / 1000.0; }
-            catch { }
-
-            string strRPM = link.getData("010C");
-            int rpm = 0;
-            try { rpm = Convert.ToInt32(strRPM, 16) / 4; }
-            catch { }
-
-            dashboard.setRPM(rpm);
-
-            if (injTime == 0 || rpm == 0)
-                errorCount++;
-            else
-            {
-                FuelRate = (double)rpm * injTime * (double)mySettings.InjectorPerformance / 1000.0;
-                errorCount = 0;
-            }
-
-            if (errorCount > 5)
-            {
-                dashboard.setRPM(0);
-                FuelRate = 0;
-                errorCount = 0;
                 requestType = RequestType.byPID;
             }
         }
+
+        /**
+         * установка соединения
+         */
         public bool connect(string portName)
         {
             if (!port.IsOpen)
@@ -241,6 +270,10 @@ namespace FuelEconomy
             }
             return false;
         }
+
+        /**
+         * настройка сканера на нужную нам работу
+         */
         public bool init()
         {
             bool res = true;
@@ -259,14 +292,22 @@ namespace FuelEconomy
                 statusBar.setStatus("Ошибка. Невозможно инициализировать сканер.");
             return res;
         }
+
+        /**
+         * запуск основной работы
+         */
         public void startWork()
         {
             if (work != null)
                 work.Abort();
-            work = new Thread(getData);
+            work = new Thread(mainWork);
             allowWork = true;
             work.Start();
         }
+
+        /**
+         * остановка опроса
+         */
         public void stopWork()
         {
             allowWork = false;

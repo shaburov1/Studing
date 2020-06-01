@@ -18,6 +18,9 @@ namespace FuelEconomy
             linkPort = port;
         }
 
+        /**
+         * получение сообщения из порта и парсинг его на заголовок и данные, возвращет только данные
+         */
         public string getData(string request)
         {
             try
@@ -43,11 +46,14 @@ namespace FuelEconomy
 
             if (res.Contains(request))
                 res = res.Replace(request, "");
+
             res = res.Replace(">", "");
             res = res.Trim();
             return res;
         }
-
+        /**
+         * приём строки, формирование запроса и отправка в порт
+         */
         public bool send(string str)
         {
             try
@@ -64,6 +70,10 @@ namespace FuelEconomy
             }
             return true;
         }
+        /**
+         * ожидание ответа в течении timeout
+         * наличие завершающего символа ">" выходит досрочно из цикла ожидания
+         */
         public void getAnswer(ref string str, int timeout = 1000)
         {
             linkPort.ReadTimeout = timeout;
@@ -81,7 +91,9 @@ namespace FuelEconomy
             }
             listenTimer.Stop();
         }
-
+        /**
+         * событие окончания таймера
+         */
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             timerFlag = false;
