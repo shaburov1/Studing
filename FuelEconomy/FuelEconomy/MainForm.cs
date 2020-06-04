@@ -15,6 +15,7 @@ namespace FuelEconomy
         private StatusBar statusBar;
         private RemoteDevice remoteScaner;
         private Dashboard dashboard;
+        private Thread Connect = null;
         public MainForm()
         {
             InitializeComponent();
@@ -104,6 +105,13 @@ namespace FuelEconomy
         }
         private void connectButton_Click(object sender, EventArgs e)
         {
+            Connect = new Thread(connectRemDev);
+            Connect.Start();
+        }
+
+        //отдельный поток, чтобы не блокировать форму
+        private void connectRemDev()
+        {
             statusBar.setStatus("Подключение.");
             if(!remoteScaner.connect(mySettings.SelectedPort))
                 return;
@@ -116,6 +124,10 @@ namespace FuelEconomy
         {
             if (adapterPort.IsOpen)
                 adapterPort.Close();
+
+            if(Connect != null)
+                Connect.Abort();
+            Connect = null;
 
             if (!adapterPort.IsOpen)
             {
