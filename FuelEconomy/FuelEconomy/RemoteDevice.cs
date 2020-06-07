@@ -7,7 +7,6 @@ namespace FuelEconomy
     class RemoteDevice
     {
         private MyLinkHandler link = null;
-        private SerialPort port = null;
         private StatusBar statusBar = null;
         private Dashboard dashboard = null;
         private MySettings mySettings = null;
@@ -42,15 +41,10 @@ namespace FuelEconomy
         public RemoteDevice(ref SerialPort sp, ref StatusBar sb, ref Dashboard db, ref MySettings ms)
         {
             statusBar = sb;
-            port = sp;
             dashboard = db;
             mySettings = ms;
 
-            //настроим порт
-            port.ReadTimeout = 6000;
-            port.NewLine = "\n";
-
-            link = new MyLinkHandler(ref sp);
+            link = new MyLinkHandler(ref sp, ref sb);
         }
 
         /*
@@ -244,24 +238,7 @@ namespace FuelEconomy
          */
         public bool connect(string portName)
         {
-            if (!port.IsOpen)
-            {
-                port.PortName = portName;
-            }
-            else
-            {
-                string str = "Ошибка. Порт " + port.PortName + " уже открыт, необходимо отключиться от порта";
-                statusBar.setStatus(str);
-                return false;
-            }
-            try { port.Open(); }
-            catch
-            {
-                statusBar.setStatus("Ошибка, подключение к порту невозможно");
-                return false;
-            }
-
-            if (port.IsOpen)
+            if (link.open(portName))
             {
                 if (verifyConnection())
                     return true;
@@ -313,6 +290,14 @@ namespace FuelEconomy
             allowWork = false;
             FuelRate = 0;
             dashboard.setRPM(0);
+        }
+
+        public void disconnect()
+        {
+            if (link.isActive())
+                link.close();
+            else
+                statusBar.setStatus("Отключено");
         }
     }
 }

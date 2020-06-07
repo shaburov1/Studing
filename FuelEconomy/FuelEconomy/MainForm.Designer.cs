@@ -444,6 +444,7 @@
             this.MinimumSize = new System.Drawing.Size(680, 600);
             this.Name = "MainForm";
             this.Text = "Fuel Economy";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl.ResumeLayout(false);
             this.mainScreen.ResumeLayout(false);

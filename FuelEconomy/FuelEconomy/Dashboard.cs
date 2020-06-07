@@ -21,10 +21,14 @@ namespace FuelEconomy
             }
             set
             {
-                value = Math.Round(value, 1);
-                fuelRate = value;
-                string str = value.ToString();
-                digitDashboard.Invoke(new Action<string>(digitDBappendText), str.Contains(",") ? str : str + ",0");
+                if (value >= 0 && value < 100)
+                {
+                    value = Math.Round(value, 1);
+                    fuelRate = value;
+                    string str = value.ToString();
+                    try { digitDashboard.Invoke(new Action<string>(digitDBappendText), str.Contains(",") ? str : str + ",0"); }
+                    catch { }
+                }
             }
         }
         private int RPM
@@ -35,9 +39,12 @@ namespace FuelEconomy
             }
             set
             {
-                rpm = value;
-                if (rpm > 0)
-                    rpmDashboard.Invoke(new Action<string>(rpmDBappendText), value.ToString());
+                if (value >= 0 && value < 9000)
+                {
+                    rpm = value;
+                    try { rpmDashboard.Invoke(new Action<string>(rpmDBappendText), value.ToString()); }
+                    catch { }
+                }
             }
         }
         private System.Timers.Timer tm;
@@ -95,14 +102,20 @@ namespace FuelEconomy
                     averIterationCount++;
                     summ += FuelRate;
                     average = Math.Round(summ / averIterationCount, 1);
-
-                    s.Points[0].YValues[0] = average;
-                    chartDashboard.Invoke(new Action(update));
-                    chartDashboard.Invoke(new Action(recalculateAxes));
+                    try
+                    {
+                        s.Points[0].YValues[0] = average;
+                        chartDashboard.Invoke(new Action(update));
+                        chartDashboard.Invoke(new Action(recalculateAxes));
+                    }
+                    catch
+                    { return; }
                     Thread.Sleep(100);
                 }
-                rollChart(average);
+                if (!isAllowed)
+                    break;
 
+                rollChart(average);
                 s.Points[0].YValues[0] = 0; //сбросим левый столбик графика
                 chartDashboard.Invoke(new Action(update));
 
@@ -141,8 +154,6 @@ namespace FuelEconomy
                 s.Points[i].YValues[0] = s.Points[i - 1].YValues[0];
             s.Points[0].YValues[0] = param;
             chartDashboard.Invoke(new Action(update));
-            //chartDashboard.Invoke(new Action<Series>(remove), s);
-            //chartDashboard.Invoke(new Action<Series>(insert), s);
         }
 
         /**

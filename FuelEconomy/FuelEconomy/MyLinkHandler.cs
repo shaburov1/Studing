@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FuelEconomy
@@ -10,12 +11,18 @@ namespace FuelEconomy
     class MyLinkHandler
     {
         private SerialPort linkPort = null;
+        private StatusBar statusBar = null;
         private System.Timers.Timer listenTimer;
         private bool timerFlag = true;
 
-        public MyLinkHandler(ref SerialPort port)
+        public MyLinkHandler(ref SerialPort port, ref StatusBar sb)
         {
+            statusBar = sb;
             linkPort = port;
+
+            //настроим порт
+            linkPort.ReadTimeout = 6000;
+            linkPort.NewLine = "\n";
         }
 
         /**
@@ -90,6 +97,43 @@ namespace FuelEconomy
                     break;
             }
             listenTimer.Stop();
+        }
+
+        public bool open(string portName)
+        {
+            if (!linkPort.IsOpen)
+            {
+                linkPort.PortName = portName;
+            }
+            else
+            {
+                string str = "Ошибка. Порт " + linkPort.PortName + " уже открыт, необходимо отключиться от порта";
+                statusBar.setStatus(str);
+                return false;
+            }
+            try { linkPort.Open(); }
+            catch
+            {
+                statusBar.setStatus("Ошибка, подключение к порту невозможно");
+                return false;
+            }
+            return true;
+        }
+
+        async public void close()
+        {
+            await Task.Run(() =>
+            {
+                try { linkPort.Close(); }
+                catch { statusBar.setStatus("Ошибка закрытия порта"); return; }
+                if (!linkPort.IsOpen)
+                    statusBar.setStatus("Отключено");
+            });
+        }
+
+        public bool isActive()
+        {
+            return linkPort.IsOpen;
         }
         /**
          * событие окончания таймера

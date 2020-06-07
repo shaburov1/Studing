@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -15,7 +16,7 @@ namespace FuelEconomy
         private StatusBar statusBar;
         private RemoteDevice remoteScaner;
         private Dashboard dashboard;
-        private Thread Connect = null;
+        Task taskConnecting = null;
         public MainForm()
         {
             InitializeComponent();
@@ -105,12 +106,10 @@ namespace FuelEconomy
         }
         private void connectButton_Click(object sender, EventArgs e)
         {
-            Connect = new Thread(connectRemDev);
-            Connect.Start();
+            taskConnecting = Task.Run(connectRemoteDev);
         }
 
-        //отдельный поток, чтобы не блокировать форму
-        private void connectRemDev()
+        private void connectRemoteDev()
         {
             statusBar.setStatus("Подключение.");
             if(!remoteScaner.connect(mySettings.SelectedPort))
@@ -120,22 +119,19 @@ namespace FuelEconomy
             dashboard.startChartWork();
             remoteScaner.startWork();
         }
-        private void disconnectButton_Click(object sender, EventArgs e)
+
+        async private void disconnectRemoteDev() 
         {
-            if (adapterPort.IsOpen)
-                adapterPort.Close();
-
-            if(Connect != null)
-                Connect.Abort();
-            Connect = null;
-
-            if (!adapterPort.IsOpen)
-            {
-                statusBar.setStatus("Отключено");
-                dashboard.stopChartWork();
-                if(remoteScaner != null)
-                    remoteScaner.stopWork();
-            }
+            statusBar.setStatus("Отключение");
+            if (taskConnecting != null)
+               taskConnecting.Wait();
+            dashboard.stopChartWork();
+            remoteScaner.stopWork();
+            remoteScaner.disconnect();
+        }
+        async private void disconnectButton_Click(object sender, EventArgs e)
+        {
+            await Task.Run(disconnectRemoteDev);
         }
         static public List<string> getCOMports()
         {
@@ -146,6 +142,11 @@ namespace FuelEconomy
                 uniqPorts.Add(m);
             }
             return uniqPorts;
+        }
+
+        async private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            await Task.Run(disconnectRemoteDev);
         }
     }
 }
