@@ -39,7 +39,7 @@ namespace FuelEconomy
         public void setStatus(string s)
         {
             try { textBar.Invoke(new Action<String>(setStatusDirectly), s); }
-            catch { }
+            catch { return; }
         }
     }
 }

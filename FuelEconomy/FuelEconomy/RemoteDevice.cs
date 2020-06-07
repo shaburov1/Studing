@@ -16,7 +16,7 @@ namespace FuelEconomy
         private Thread work = null;
 
         /**
-         * структура методов расчета мгновенного расхода топлива
+         * структура алгоритмов расчета мгновенного расхода топлива
          */
         enum RequestType
         {

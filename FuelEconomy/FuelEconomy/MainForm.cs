@@ -120,7 +120,7 @@ namespace FuelEconomy
             remoteScaner.startWork();
         }
 
-        async private void disconnectRemoteDev() 
+        private void disconnectRemoteDev() 
         {
             statusBar.setStatus("Отключение");
             if (taskConnecting != null)

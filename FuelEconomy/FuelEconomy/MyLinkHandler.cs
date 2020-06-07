@@ -99,6 +99,9 @@ namespace FuelEconomy
             listenTimer.Stop();
         }
 
+        /**
+         * открытие соединения
+         */
         public bool open(string portName)
         {
             if (!linkPort.IsOpen)
@@ -120,6 +123,9 @@ namespace FuelEconomy
             return true;
         }
 
+        /**
+         * закрытиие соединения
+         */
         async public void close()
         {
             await Task.Run(() =>
